@@ -3,7 +3,6 @@
  */
 
 package com.josh.numberboard;
-
 /**
  *
  * @author Josh
@@ -11,6 +10,6 @@ package com.josh.numberboard;
 public class main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        
     }
 }

@@ -4,6 +4,12 @@
  */
 package com.josh.numberboard;
 
+import java.awt.Color;
+import java.awt.Image;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 /**
  *
  * @author Josh
@@ -15,6 +21,16 @@ public class StartMenu extends javax.swing.JFrame {
      */
     public StartMenu() {
         initComponents();
+        
+        this.setLocationRelativeTo(null);
+        setImageLabel(fontLabel, "src/main/java/com/josh/resources/Skywallpaper.png");
+    }
+    
+    private void setImageLabel(JLabel label, String imageRute){
+        ImageIcon font = new ImageIcon(imageRute);
+        Icon image = new ImageIcon(font.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+        label.setIcon(image);
+        this.repaint();
     }
 
     /**
@@ -26,17 +42,33 @@ public class StartMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        voidPanel = new javax.swing.JPanel();
+        Start = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        fontLabel = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        voidPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        Start.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        Start.setLabel("Empezar");
+        voidPanel.add(Start, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 140, 70));
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel1.setText("Crea Tablonarios para eventos\n");
+        voidPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 280, 100));
+        voidPanel.add(fontLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 420));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(voidPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(voidPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -78,5 +110,9 @@ public class StartMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Start;
+    private javax.swing.JLabel fontLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel voidPanel;
     // End of variables declaration//GEN-END:variables
 }
