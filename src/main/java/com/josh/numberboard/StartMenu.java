@@ -53,6 +53,11 @@ public class StartMenu extends javax.swing.JFrame {
 
         Start.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         Start.setLabel("Empezar");
+        Start.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StartActionPerformed(evt);
+            }
+        });
         voidPanel.add(Start, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 140, 70));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
@@ -73,6 +78,13 @@ public class StartMenu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
+        BoardsMenu boardWindow = new BoardsMenu();
+        boardWindow.setLocation(this.getLocation().x, this.getLocation().y);
+        boardWindow.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_StartActionPerformed
 
     /**
      * @param args the command line arguments
