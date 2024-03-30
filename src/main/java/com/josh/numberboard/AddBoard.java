@@ -99,57 +99,86 @@ public class AddBoard extends javax.swing.JFrame {
         BoardDescText.setLineWrap(true);
         BoardDescText.setRows(5);
         BoardDescText.setWrapStyleWord(true);
+        BoardDescText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardDescTextKeyTyped(evt);
+            }
+        });
         BoardDesc.setViewportView(BoardDescText);
 
-        fontPanel.add(BoardDesc, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 340, 90));
+        fontPanel.add(BoardDesc, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 340, 100));
 
-        BoardOwner.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         BoardOwner.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BoardOwnerActionPerformed(evt);
             }
         });
-        fontPanel.add(BoardOwner, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 180, -1));
+        BoardOwner.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardOwnerKeyTyped(evt);
+            }
+        });
+        fontPanel.add(BoardOwner, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 230, -1));
 
-        BoardName.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         BoardName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BoardNameActionPerformed(evt);
             }
         });
-        fontPanel.add(BoardName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 180, -1));
+        BoardName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardNameKeyTyped(evt);
+            }
+        });
+        fontPanel.add(BoardName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 230, -1));
 
-        BoardNumbers.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         BoardNumbers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BoardNumbersActionPerformed(evt);
             }
         });
+        BoardNumbers.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardNumbersKeyTyped(evt);
+            }
+        });
         fontPanel.add(BoardNumbers, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, -1));
 
-        BoardWinners.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         BoardWinners.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BoardWinnersActionPerformed(evt);
             }
         });
-        fontPanel.add(BoardWinners, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, 150, -1));
+        BoardWinners.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardWinnersKeyTyped(evt);
+            }
+        });
+        fontPanel.add(BoardWinners, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, 170, -1));
 
-        BoardValue.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         BoardValue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BoardValueActionPerformed(evt);
             }
         });
+        BoardValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardValueKeyTyped(evt);
+            }
+        });
         fontPanel.add(BoardValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 130, -1));
 
-        BoardPrize.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         BoardPrize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BoardPrizeActionPerformed(evt);
             }
         });
-        fontPanel.add(BoardPrize, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, 150, -1));
+        BoardPrize.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardPrizeKeyTyped(evt);
+            }
+        });
+        fontPanel.add(BoardPrize, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, 170, -1));
 
         ConfirmButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         ConfirmButton.setText("Confirmar");
@@ -215,6 +244,50 @@ public class AddBoard extends javax.swing.JFrame {
         //
     }//GEN-LAST:event_ConfirmButtonActionPerformed
 
+    private void BoardNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardNameKeyTyped
+        if(BoardName.getText().length() >= 32){
+            evt.consume();
+        }
+    }//GEN-LAST:event_BoardNameKeyTyped
+
+    private void BoardOwnerKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardOwnerKeyTyped
+        if(BoardOwner.getText().length() >= 32){
+            evt.consume();
+        }
+    }//GEN-LAST:event_BoardOwnerKeyTyped
+
+    private void BoardDescTextKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardDescTextKeyTyped
+        if(BoardDescText.getText().length() >= 256){
+            evt.consume();
+        }
+    }//GEN-LAST:event_BoardDescTextKeyTyped
+
+    private void BoardPrizeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardPrizeKeyTyped
+        if(BoardPrize.getText().length() >= 24){
+            evt.consume();
+        }
+    }//GEN-LAST:event_BoardPrizeKeyTyped
+
+    private void BoardValueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardValueKeyTyped
+        isNumber(evt);
+    }//GEN-LAST:event_BoardValueKeyTyped
+
+    private void BoardWinnersKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardWinnersKeyTyped
+        isNumber(evt);
+    }//GEN-LAST:event_BoardWinnersKeyTyped
+
+    private void BoardNumbersKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardNumbersKeyTyped
+        isNumber(evt);
+    }//GEN-LAST:event_BoardNumbersKeyTyped
+    
+    private void isNumber(java.awt.event.KeyEvent evt){
+        int key = evt.getKeyChar();
+        boolean isNum = key >= 48 && key <= 57;
+        
+        if(!isNum){
+            evt.consume();
+        }
+    }
     /**
      * @param args the command line arguments
      */
