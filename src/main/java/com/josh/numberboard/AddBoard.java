@@ -4,19 +4,33 @@
  */
 package com.josh.numberboard;
 
+import static com.josh.numberboard.StartMenu.boardWindow;
+import java.awt.Image;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 /**
  *
  * @author Josh
  */
 public class AddBoard extends javax.swing.JFrame {
-
     /**
      * Creates new form AddBoard
      */
     public AddBoard() {
         initComponents();
+        
+        setImageLabel(fontLabel, "src/main/java/com/josh/resources/LandscapeWP.png");
     }
 
+    private void setImageLabel(JLabel label, String imageRute){
+        ImageIcon font = new ImageIcon(imageRute);
+        Icon image = new ImageIcon(font.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_DEFAULT));
+        label.setIcon(image);
+        this.repaint();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,26 +41,179 @@ public class AddBoard extends javax.swing.JFrame {
     private void initComponents() {
 
         fontPanel = new javax.swing.JPanel();
+        Owner = new javax.swing.JLabel();
+        name = new javax.swing.JLabel();
+        Numbers = new javax.swing.JLabel();
+        Winners = new javax.swing.JLabel();
+        Value = new javax.swing.JLabel();
+        Prize = new javax.swing.JLabel();
+        Description = new javax.swing.JLabel();
+        BoardDesc = new javax.swing.JScrollPane();
+        BoardDescText = new javax.swing.JTextArea();
+        BoardOwner = new javax.swing.JTextField();
+        BoardName = new javax.swing.JTextField();
+        BoardNumbers = new javax.swing.JTextField();
+        BoardWinners = new javax.swing.JTextField();
+        BoardValue = new javax.swing.JTextField();
+        BoardPrize = new javax.swing.JTextField();
+        ConfirmButton = new javax.swing.JButton();
         fontLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
 
+        fontPanel.setPreferredSize(new java.awt.Dimension(360, 440));
         fontPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        fontPanel.add(fontLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 380, 180));
+
+        Owner.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Owner.setText("Propietario:");
+        fontPanel.add(Owner, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 90, -1));
+
+        name.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        name.setText("Nombre:");
+        fontPanel.add(name, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 70, -1));
+
+        Numbers.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Numbers.setText("Cantidad de numeros:");
+        fontPanel.add(Numbers, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 140, -1));
+        Numbers.getAccessibleContext().setAccessibleName("Valor:");
+
+        Winners.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Winners.setText("Cantidad de ganadores:");
+        fontPanel.add(Winners, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 140, -1));
+
+        Value.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Value.setText("Valor por numero:");
+        fontPanel.add(Value, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 140, -1));
+
+        Prize.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Prize.setText("Premio:");
+        fontPanel.add(Prize, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 190, 140, -1));
+
+        Description.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Description.setText("Descripcion:");
+        fontPanel.add(Description, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 140, -1));
+
+        BoardDescText.setColumns(20);
+        BoardDescText.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        BoardDescText.setLineWrap(true);
+        BoardDescText.setRows(5);
+        BoardDescText.setWrapStyleWord(true);
+        BoardDesc.setViewportView(BoardDescText);
+
+        fontPanel.add(BoardDesc, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 340, 90));
+
+        BoardOwner.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        BoardOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoardOwnerActionPerformed(evt);
+            }
+        });
+        fontPanel.add(BoardOwner, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 180, -1));
+
+        BoardName.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        BoardName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoardNameActionPerformed(evt);
+            }
+        });
+        fontPanel.add(BoardName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 180, -1));
+
+        BoardNumbers.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        BoardNumbers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoardNumbersActionPerformed(evt);
+            }
+        });
+        fontPanel.add(BoardNumbers, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, -1));
+
+        BoardWinners.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        BoardWinners.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoardWinnersActionPerformed(evt);
+            }
+        });
+        fontPanel.add(BoardWinners, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, 150, -1));
+
+        BoardValue.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        BoardValue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoardValueActionPerformed(evt);
+            }
+        });
+        fontPanel.add(BoardValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 130, -1));
+
+        BoardPrize.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        BoardPrize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoardPrizeActionPerformed(evt);
+            }
+        });
+        fontPanel.add(BoardPrize, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, 150, -1));
+
+        ConfirmButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        ConfirmButton.setText("Confirmar");
+        ConfirmButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ConfirmButtonActionPerformed(evt);
+            }
+        });
+        fontPanel.add(ConfirmButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 90, 30));
+        fontPanel.add(fontLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 360, 440));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fontPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(fontPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fontPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(fontPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BoardOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardOwnerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoardOwnerActionPerformed
+
+    private void BoardNumbersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardNumbersActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoardNumbersActionPerformed
+
+    private void BoardWinnersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardWinnersActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoardWinnersActionPerformed
+
+    private void BoardValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardValueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoardValueActionPerformed
+
+    private void BoardPrizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardPrizeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoardPrizeActionPerformed
+
+    private void BoardNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoardNameActionPerformed
+
+    private void ConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmButtonActionPerformed
+
+        boardWindow.addElementList(BoardName.getText());
+        
+        this.dispose();
+        //clean form
+        BoardName.setText("");
+        BoardNumbers.setText("");
+        BoardOwner.setText("");
+        BoardPrize.setText("");
+        BoardValue.setText("");
+        BoardWinners.setText("");
+        BoardDescText.setText("");
+        //
+    }//GEN-LAST:event_ConfirmButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -84,7 +251,23 @@ public class AddBoard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane BoardDesc;
+    private javax.swing.JTextArea BoardDescText;
+    private javax.swing.JTextField BoardName;
+    private javax.swing.JTextField BoardNumbers;
+    private javax.swing.JTextField BoardOwner;
+    private javax.swing.JTextField BoardPrize;
+    private javax.swing.JTextField BoardValue;
+    private javax.swing.JTextField BoardWinners;
+    private javax.swing.JButton ConfirmButton;
+    private javax.swing.JLabel Description;
+    private javax.swing.JLabel Numbers;
+    private javax.swing.JLabel Owner;
+    private javax.swing.JLabel Prize;
+    private javax.swing.JLabel Value;
+    private javax.swing.JLabel Winners;
     private javax.swing.JLabel fontLabel;
     private javax.swing.JPanel fontPanel;
+    private javax.swing.JLabel name;
     // End of variables declaration//GEN-END:variables
 }

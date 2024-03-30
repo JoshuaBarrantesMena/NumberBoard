@@ -5,9 +5,11 @@
 package com.josh.numberboard;
 
 import java.awt.Image;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,13 +17,21 @@ import javax.swing.JLabel;
  */
 public class BoardsMenu extends javax.swing.JFrame {
 
+    
+    DefaultListModel listModel;
     /**
      * Creates new form BoardsMenu
      */
     public BoardsMenu() {
         initComponents();
-        
+        listModel = new DefaultListModel();
+        ListBoard.setModel(listModel);
         setImageLabel(fontLabel, "src/main/java/com/josh/resources/Skywallpaper.png");
+        
+        //añadir elementos de prueba
+        listModel.addElement("tablonario 1");
+        listModel.addElement("tablonario 2");
+        listModel.addElement("tablonario 3");
     }
     
     private void setImageLabel(JLabel label, String imageRute){
@@ -31,6 +41,13 @@ public class BoardsMenu extends javax.swing.JFrame {
         this.repaint();
     }
 
+    public BoardsMenu syncWindow(){
+        return this;
+    }
+    
+    public void addElementList(String newValue){
+        listModel.addElement(newValue);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -50,7 +67,6 @@ public class BoardsMenu extends javax.swing.JFrame {
         fontLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(640, 420));
 
         fontPanel.setMinimumSize(new java.awt.Dimension(640, 420));
         fontPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -58,6 +74,11 @@ public class BoardsMenu extends javax.swing.JFrame {
         DeleteBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         DeleteBoard.setText("Eliminar Tablonario");
         DeleteBoard.setEnabled(false);
+        DeleteBoard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteBoardActionPerformed(evt);
+            }
+        });
         fontPanel.add(DeleteBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 150, 170, 40));
 
         createBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -71,7 +92,6 @@ public class BoardsMenu extends javax.swing.JFrame {
 
         OpenBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         OpenBoard.setText("Abrir Tablonario");
-        OpenBoard.setActionCommand("Abrir Tablonario");
         OpenBoard.setEnabled(false);
         fontPanel.add(OpenBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 90, 170, 40));
 
@@ -108,6 +128,7 @@ public class BoardsMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBoardActionPerformed
+        AddBoard newBoard = new AddBoard();
         newBoard.setLocationRelativeTo(null);
         newBoard.setVisible(true);
     }//GEN-LAST:event_createBoardActionPerformed
@@ -118,6 +139,17 @@ public class BoardsMenu extends javax.swing.JFrame {
             DeleteBoard.setEnabled(true);
         }
     }//GEN-LAST:event_ListBoardMouseClicked
+
+    private void DeleteBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBoardActionPerformed
+        String[] options = {"Cancelar", "Ok"};
+        int opt = JOptionPane.showOptionDialog(null,"Esta a punto de eliminar el tablonario seleccionado\n\n¿Desea eliminarlo?", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
+        
+        if(opt == 1){
+            listModel.remove(ListBoard.getSelectedIndex());
+            OpenBoard.setEnabled(false);
+            DeleteBoard.setEnabled(false);
+        }
+    }//GEN-LAST:event_DeleteBoardActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,6 +195,4 @@ public class BoardsMenu extends javax.swing.JFrame {
     private javax.swing.JLabel fontLabel;
     private javax.swing.JPanel fontPanel;
     // End of variables declaration//GEN-END:variables
-
-    private AddBoard newBoard = new AddBoard();
 }

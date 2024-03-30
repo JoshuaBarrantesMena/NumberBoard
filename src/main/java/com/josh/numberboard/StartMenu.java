@@ -4,7 +4,6 @@
  */
 package com.josh.numberboard;
 
-import java.awt.Color;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -16,6 +15,7 @@ import javax.swing.JLabel;
  */
 public class StartMenu extends javax.swing.JFrame {
 
+    public static BoardsMenu boardWindow;
     /**
      * Creates new form StartMenu
      */
@@ -80,7 +80,7 @@ public class StartMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
-        BoardsMenu boardWindow = new BoardsMenu();
+        boardWindow = new BoardsMenu();
         boardWindow.setLocation(this.getLocation().x, this.getLocation().y);
         boardWindow.setVisible(true);
         this.setVisible(false);
