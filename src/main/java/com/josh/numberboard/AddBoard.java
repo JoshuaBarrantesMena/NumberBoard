@@ -42,6 +42,10 @@ public class AddBoard extends javax.swing.JFrame {
 
         fontPanel = new javax.swing.JPanel();
         Owner = new javax.swing.JLabel();
+        Day = new javax.swing.JLabel();
+        Month = new javax.swing.JLabel();
+        Year = new javax.swing.JLabel();
+        Date = new javax.swing.JLabel();
         name = new javax.swing.JLabel();
         Numbers = new javax.swing.JLabel();
         Winners = new javax.swing.JLabel();
@@ -51,6 +55,9 @@ public class AddBoard extends javax.swing.JFrame {
         BoardDesc = new javax.swing.JScrollPane();
         BoardDescText = new javax.swing.JTextArea();
         BoardOwner = new javax.swing.JTextField();
+        BoardDay = new javax.swing.JTextField();
+        BoardMonth = new javax.swing.JTextField();
+        BoardYear = new javax.swing.JTextField();
         BoardName = new javax.swing.JTextField();
         BoardNumbers = new javax.swing.JTextField();
         BoardWinners = new javax.swing.JTextField();
@@ -69,6 +76,22 @@ public class AddBoard extends javax.swing.JFrame {
         Owner.setText("Propietario:");
         fontPanel.add(Owner, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 90, -1));
 
+        Day.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Day.setText("Dia:");
+        fontPanel.add(Day, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 30, 30, 20));
+
+        Month.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Month.setText("Mes:");
+        fontPanel.add(Month, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 60, 30, 20));
+
+        Year.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Year.setText("Año:");
+        fontPanel.add(Year, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 30, 20));
+
+        Date.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        Date.setText("Fecha Limite:");
+        fontPanel.add(Date, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, 90, -1));
+
         name.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         name.setText("Nombre:");
         fontPanel.add(name, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 70, -1));
@@ -80,7 +103,7 @@ public class AddBoard extends javax.swing.JFrame {
 
         Winners.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         Winners.setText("Cantidad de ganadores:");
-        fontPanel.add(Winners, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 140, -1));
+        fontPanel.add(Winners, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 140, -1));
 
         Value.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         Value.setText("Valor por numero:");
@@ -88,7 +111,7 @@ public class AddBoard extends javax.swing.JFrame {
 
         Prize.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         Prize.setText("Premio:");
-        fontPanel.add(Prize, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 190, 140, -1));
+        fontPanel.add(Prize, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, 140, -1));
 
         Description.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         Description.setText("Descripcion:");
@@ -106,79 +129,70 @@ public class AddBoard extends javax.swing.JFrame {
         });
         BoardDesc.setViewportView(BoardDescText);
 
-        fontPanel.add(BoardDesc, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 340, 100));
+        fontPanel.add(BoardDesc, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 370, 100));
 
-        BoardOwner.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BoardOwnerActionPerformed(evt);
-            }
-        });
         BoardOwner.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 BoardOwnerKeyTyped(evt);
             }
         });
-        fontPanel.add(BoardOwner, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 230, -1));
+        fontPanel.add(BoardOwner, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 220, -1));
 
-        BoardName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BoardNameActionPerformed(evt);
+        BoardDay.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardDayKeyTyped(evt);
             }
         });
+        fontPanel.add(BoardDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 30, 70, -1));
+
+        BoardMonth.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardMonthKeyTyped(evt);
+            }
+        });
+        fontPanel.add(BoardMonth, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 60, 70, -1));
+
+        BoardYear.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                BoardYearKeyTyped(evt);
+            }
+        });
+        fontPanel.add(BoardYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 70, -1));
+
         BoardName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 BoardNameKeyTyped(evt);
             }
         });
-        fontPanel.add(BoardName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 230, -1));
+        fontPanel.add(BoardName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 220, -1));
 
-        BoardNumbers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BoardNumbersActionPerformed(evt);
-            }
-        });
         BoardNumbers.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 BoardNumbersKeyTyped(evt);
             }
         });
-        fontPanel.add(BoardNumbers, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, -1));
+        fontPanel.add(BoardNumbers, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 150, -1));
 
-        BoardWinners.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BoardWinnersActionPerformed(evt);
-            }
-        });
         BoardWinners.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 BoardWinnersKeyTyped(evt);
             }
         });
-        fontPanel.add(BoardWinners, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, 170, -1));
+        fontPanel.add(BoardWinners, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 180, -1));
 
-        BoardValue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BoardValueActionPerformed(evt);
-            }
-        });
         BoardValue.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 BoardValueKeyTyped(evt);
             }
         });
-        fontPanel.add(BoardValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 130, -1));
+        fontPanel.add(BoardValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 150, -1));
 
-        BoardPrize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BoardPrizeActionPerformed(evt);
-            }
-        });
         BoardPrize.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 BoardPrizeKeyTyped(evt);
             }
         });
-        fontPanel.add(BoardPrize, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, 170, -1));
+        fontPanel.add(BoardPrize, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 210, 180, -1));
 
         ConfirmButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         ConfirmButton.setText("Confirmar");
@@ -187,8 +201,8 @@ public class AddBoard extends javax.swing.JFrame {
                 ConfirmButtonActionPerformed(evt);
             }
         });
-        fontPanel.add(ConfirmButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 90, 30));
-        fontPanel.add(fontLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 360, 440));
+        fontPanel.add(ConfirmButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 390, 90, 30));
+        fontPanel.add(fontLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 390, 440));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -203,30 +217,6 @@ public class AddBoard extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void BoardOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardOwnerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BoardOwnerActionPerformed
-
-    private void BoardNumbersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardNumbersActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BoardNumbersActionPerformed
-
-    private void BoardWinnersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardWinnersActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BoardWinnersActionPerformed
-
-    private void BoardValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardValueActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BoardValueActionPerformed
-
-    private void BoardPrizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardPrizeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BoardPrizeActionPerformed
-
-    private void BoardNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoardNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BoardNameActionPerformed
 
     private void ConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmButtonActionPerformed
 
@@ -279,6 +269,24 @@ public class AddBoard extends javax.swing.JFrame {
     private void BoardNumbersKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardNumbersKeyTyped
         isNumber(evt);
     }//GEN-LAST:event_BoardNumbersKeyTyped
+
+    private void BoardDayKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardDayKeyTyped
+        if(BoardDay.getText().length() >= 2){
+            evt.consume();
+        }
+    }//GEN-LAST:event_BoardDayKeyTyped
+
+    private void BoardMonthKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardMonthKeyTyped
+        if(BoardMonth.getText().length() >= 2){
+            evt.consume();
+        }
+    }//GEN-LAST:event_BoardMonthKeyTyped
+
+    private void BoardYearKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardYearKeyTyped
+        if(BoardYear.getText().length() >= 4){
+            evt.consume();
+        }
+    }//GEN-LAST:event_BoardYearKeyTyped
     
     private void isNumber(java.awt.event.KeyEvent evt){
         int key = evt.getKeyChar();
@@ -324,21 +332,28 @@ public class AddBoard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField BoardDay;
     private javax.swing.JScrollPane BoardDesc;
     private javax.swing.JTextArea BoardDescText;
+    private javax.swing.JTextField BoardMonth;
     private javax.swing.JTextField BoardName;
     private javax.swing.JTextField BoardNumbers;
     private javax.swing.JTextField BoardOwner;
     private javax.swing.JTextField BoardPrize;
     private javax.swing.JTextField BoardValue;
     private javax.swing.JTextField BoardWinners;
+    private javax.swing.JTextField BoardYear;
     private javax.swing.JButton ConfirmButton;
+    private javax.swing.JLabel Date;
+    private javax.swing.JLabel Day;
     private javax.swing.JLabel Description;
+    private javax.swing.JLabel Month;
     private javax.swing.JLabel Numbers;
     private javax.swing.JLabel Owner;
     private javax.swing.JLabel Prize;
     private javax.swing.JLabel Value;
     private javax.swing.JLabel Winners;
+    private javax.swing.JLabel Year;
     private javax.swing.JLabel fontLabel;
     private javax.swing.JPanel fontPanel;
     private javax.swing.JLabel name;
