@@ -5,9 +5,12 @@
 package com.josh.numberboard;
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
 /**
  *
@@ -80,10 +83,43 @@ public class StartMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
-        boardWindow = new BoardsMenu();
-        boardWindow.setLocation(this.getLocation().x, this.getLocation().y);
-        boardWindow.setVisible(true);
-        this.setVisible(false);
+       SplashScreen splashScreen = new SplashScreen();
+    
+  
+    Timer timer = new Timer(30, new ActionListener() {
+        private int progress = 0;
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            progress++;
+            
+            splashScreen.setProgress(progress);
+            
+           
+            if (progress == 100) {
+                ((Timer) e.getSource()).stop();
+                
+             
+                boardWindow = new BoardsMenu();
+                boardWindow.setLocationRelativeTo(null);
+                boardWindow.setVisible(true);
+                
+               
+                splashScreen.dispose();
+                
+               
+                dispose();
+            }
+        }
+    });
+    
+    
+    timer.start();
+        
+           
+        
+        
     }//GEN-LAST:event_StartActionPerformed
 
     /**
