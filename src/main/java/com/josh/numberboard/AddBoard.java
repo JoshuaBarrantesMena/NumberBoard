@@ -330,7 +330,11 @@ public class AddBoard extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    
+    
+    
+   private javax.swing.JLabel creatingLabel; 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField BoardDay;
     private javax.swing.JScrollPane BoardDesc;
@@ -359,3 +363,4 @@ public class AddBoard extends javax.swing.JFrame {
     private javax.swing.JLabel name;
     // End of variables declaration//GEN-END:variables
 }
+
