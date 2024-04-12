@@ -6,7 +6,6 @@ package com.josh.numberboard;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JProgressBar;
 import javax.swing.JWindow;
 import javax.swing.Timer;
 import java.awt.BorderLayout;
@@ -32,7 +31,7 @@ public class SplashScreen extends JWindow {
         progressBar.setMaximum(100);
 
         
-        timer = new Timer(30, new ActionListener() {
+        timer = new Timer(10, new ActionListener() {
             private int progress = 0;
 
             @Override
@@ -51,7 +50,7 @@ public class SplashScreen extends JWindow {
         });
 
         
-        setSize(icon.getIconWidth(), icon.getIconHeight() + progressBar.getPreferredSize().height);
+        setSize(icon.getIconWidth() / 2, icon.getIconHeight() / 2 + progressBar.getPreferredSize().height);
 
         
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

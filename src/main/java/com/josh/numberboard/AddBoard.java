@@ -61,7 +61,7 @@ public class AddBoard extends javax.swing.JFrame {
         BoardName = new javax.swing.JTextField();
         BoardNumbers = new javax.swing.JTextField();
         BoardWinners = new javax.swing.JTextField();
-        BoardValue = new javax.swing.JTextField();
+        BoardPrice = new javax.swing.JTextField();
         BoardPrize = new javax.swing.JTextField();
         ConfirmButton = new javax.swing.JButton();
         fontLabel = new javax.swing.JLabel();
@@ -180,12 +180,12 @@ public class AddBoard extends javax.swing.JFrame {
         });
         fontPanel.add(BoardWinners, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 180, -1));
 
-        BoardValue.addKeyListener(new java.awt.event.KeyAdapter() {
+        BoardPrice.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                BoardValueKeyTyped(evt);
+                BoardPriceKeyTyped(evt);
             }
         });
-        fontPanel.add(BoardValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 150, -1));
+        fontPanel.add(BoardPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 150, -1));
 
         BoardPrize.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -221,6 +221,22 @@ public class AddBoard extends javax.swing.JFrame {
     private void ConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmButtonActionPerformed
 
         boardWindow.addElementList(BoardName.getText());
+        String name = BoardName.getText();
+        String owner = BoardOwner.getText();
+        int numAmount = Integer.parseInt(BoardNumbers.getText());
+        int winAmount = Integer.parseInt(BoardWinners.getText());
+        int numPrice = Integer.parseInt(BoardPrice.getText());
+        String prize = BoardPrize.getText();
+        String boardDesc = BoardDescText.getText();
+        String date = BoardDay.getText() + "/" + BoardMonth.getText() + "/";
+        
+        String year = "", aux  = BoardYear.getText();
+        if(aux.length()-1 > 2){
+            year = aux.substring(aux.length()-2);
+        }
+        date = date + year;
+        Boards newBoard = new Boards(name, owner, numAmount, winAmount, numPrice, prize, boardDesc, date);
+        boardWindow.boardList.add(newBoard);
         
         this.dispose();
         //clean form
@@ -228,7 +244,7 @@ public class AddBoard extends javax.swing.JFrame {
         BoardNumbers.setText("");
         BoardOwner.setText("");
         BoardPrize.setText("");
-        BoardValue.setText("");
+        BoardPrice.setText("");
         BoardWinners.setText("");
         BoardDescText.setText("");
         //
@@ -258,9 +274,9 @@ public class AddBoard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BoardPrizeKeyTyped
 
-    private void BoardValueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardValueKeyTyped
+    private void BoardPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardPriceKeyTyped
         isNumber(evt);
-    }//GEN-LAST:event_BoardValueKeyTyped
+    }//GEN-LAST:event_BoardPriceKeyTyped
 
     private void BoardWinnersKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BoardWinnersKeyTyped
         isNumber(evt);
@@ -343,8 +359,8 @@ public class AddBoard extends javax.swing.JFrame {
     private javax.swing.JTextField BoardName;
     private javax.swing.JTextField BoardNumbers;
     private javax.swing.JTextField BoardOwner;
+    private javax.swing.JTextField BoardPrice;
     private javax.swing.JTextField BoardPrize;
-    private javax.swing.JTextField BoardValue;
     private javax.swing.JTextField BoardWinners;
     private javax.swing.JTextField BoardYear;
     private javax.swing.JButton ConfirmButton;
