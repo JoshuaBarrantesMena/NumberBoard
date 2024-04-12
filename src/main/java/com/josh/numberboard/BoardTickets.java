@@ -4,6 +4,8 @@
  */
 package com.josh.numberboard;
 
+import static com.josh.numberboard.BoardsMenu.boardsList;
+import static com.josh.numberboard.StartMenu.boardWindow;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,47 +20,89 @@ public class BoardTickets extends javax.swing.JFrame {
     /**
      * Creates new form BoardTickets
      */
-    public BoardTickets() {
+    
+    private  int rows;
+    public BoardTickets( ) {
         initComponents();
         setLocationRelativeTo(null);
-         ticketsButtons();
+        // ticketsButtons();
+      
+         
     }
 
-    int rows=25;
-    int columns=4;
+
+    
+            int rowsIndex;
+
     int ticketWidth=60;
     int ticketSize=140;
     int axisX=20;
     int axisY=20;
-            
-            public JToggleButton [][] ticketsButtonsArray= new JToggleButton[rows][columns];
-            
-            public void ticketsButtons()
+        
+    public void initRows(int num){
+        System.out.println(num);
+    rows=  boardsList.get(num).getNumAmount();
+  //  rows=100;
+
+   jLabel1.setText( boardsList.get(num).getName());
+    ticketsButtons();
+    }
+    
+         public JToggleButton [] ticketsButtonsArray= new JToggleButton[rows];
+          public void ticketsButtons()
             {
-                int rowsIndex;
-                int columnsIndex;
                 int ticketCounter=0;
-            ticketsButtonsArray= new JToggleButton[rows][columns];
+            ticketsButtonsArray= new JToggleButton[rows];
             
                 for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
-                    for (columnsIndex = 0; columnsIndex < columns; columnsIndex++) {
-                            ticketsButtonsArray[rowsIndex][columnsIndex] = new JToggleButton();
-                              ticketsButtonsArray[rowsIndex][columnsIndex].setBounds(axisX, axisY, ticketSize, ticketWidth);
-                              ticketsButtonsArray[rowsIndex][columnsIndex].setText("Numero "+ ticketCounter);
+              
+                            ticketsButtonsArray[rowsIndex] = new JToggleButton();
+                              ticketsButtonsArray[rowsIndex].setBounds(axisX, axisY, ticketSize, ticketWidth);
+                              ticketsButtonsArray[rowsIndex].setText("Numero "+ ticketCounter);
                               
                                ActionTicketsButtons action= new  ActionTicketsButtons();
-                                ticketsButtonsArray[rowsIndex][columnsIndex].addActionListener(action);
-                        ticketsPanel.add( ticketsButtonsArray[rowsIndex][columnsIndex] );            
-                        ticketsButtonsArray[rowsIndex][columnsIndex].setBackground(Color.GREEN);
+                                ticketsButtonsArray[rowsIndex].addActionListener(action);
+                        ticketsPanel.add( ticketsButtonsArray[rowsIndex] );            
+                        ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);
                         
                         
                         ticketCounter++;
                         axisX += 160;
-                    }
+                    
                     axisX=20;
                     axisY+=70;
                 }
             }
+         
+          public class ActionTicketsButtons implements ActionListener
+       {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+              int rowsIndex;
+        
+                
+                
+                for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) 
+                {
+              
+                      
+                        if(ae.getSource().equals(ticketsButtonsArray[rowsIndex]))
+                        {
+                        if(ticketsButtonsArray[rowsIndex].isSelected())
+                        {
+                            ticketsButtonsArray[rowsIndex].setBackground(Color.RED);
+                        }
+                        else
+                        {
+                                                        ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);                
+                        }
+                        }
+                
+                        }
+        }
+          }
+     
     public void reserveTickets()
     {
     
@@ -68,40 +112,7 @@ public class BoardTickets extends javax.swing.JFrame {
     {
     
     }
-       
-       public class ActionTicketsButtons implements ActionListener
-       {
-
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-              int rowsIndex;
-                int columnsIndex;
-                
-                
-                for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) 
-                {
-                    for (columnsIndex = 0; columnsIndex < columns; columnsIndex++)
-                    {
-                      
-                        if(ae.getSource().equals(ticketsButtonsArray[rowsIndex][columnsIndex]))
-                        {
-                        if(ticketsButtonsArray[rowsIndex][columnsIndex].isSelected())
-                        {
-                            ticketsButtonsArray[rowsIndex][columnsIndex].setBackground(Color.RED);
-                        }
-                        else
-                        {
-                                                        ticketsButtonsArray[rowsIndex][columnsIndex].setBackground(Color.GREEN);                
-                        }
-                        }
-                       
-                
-                        }
-        }
-                
-        }
-       
-       }
+      
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -193,7 +204,7 @@ public class BoardTickets extends javax.swing.JFrame {
             }
         });
 
-        ticketsPanel.setLayout(new java.awt.GridLayout(0, 4));
+        ticketsPanel.setLayout(new java.awt.GridLayout(0, 4, 20, 20));
         jScrollPane1.setViewportView(ticketsPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -221,11 +232,8 @@ public class BoardTickets extends javax.swing.JFrame {
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(413, 413, 413)
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1)))
+                        .addComponent(jLabel1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -234,8 +242,8 @@ public class BoardTickets extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -266,13 +274,15 @@ public class BoardTickets extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        BoardsMenu menuView= new   BoardsMenu ();
-        menuView.setVisible(true);
+        
+        boardWindow.setVisible(true);
         this.dispose();
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
                         JToggleButton aux=new JToggleButton();
@@ -280,19 +290,18 @@ public class BoardTickets extends javax.swing.JFrame {
                         aux.setBackground(Color.red);
 
                    int rowsIndex;
-                int columnsIndex;
-//            ticketsButtonsArray= new JToggleButton[rows][columns];
+       
             
                 for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
-                    for (columnsIndex = 0; columnsIndex < columns; columnsIndex++) {
+          
                         
-                         if (    ticketsButtonsArray[rowsIndex][columnsIndex].getBackground()== aux.getBackground()) {
+                         if (    ticketsButtonsArray[rowsIndex].getBackground()== aux.getBackground()) {
                             
-                                  ticketsButtonsArray[rowsIndex][columnsIndex].setBackground(Color.YELLOW);                
+                                  ticketsButtonsArray[rowsIndex].setBackground(Color.YELLOW);                
 
                         }
                     }
-                }
+                
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
