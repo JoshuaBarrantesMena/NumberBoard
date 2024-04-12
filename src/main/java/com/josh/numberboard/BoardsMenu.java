@@ -25,8 +25,9 @@ import javax.swing.JOptionPane;
 public class BoardsMenu extends javax.swing.JFrame {
 
     
-    DefaultListModel listModel;
-    public ArrayList<Boards> boardList = new ArrayList<>();
+ public static   DefaultListModel listModel=new DefaultListModel();
+    
+  public static  ArrayList<Boards> boardsList= new ArrayList<>();
     
     /**
      * Creates new form BoardsMenu
@@ -38,6 +39,7 @@ public class BoardsMenu extends javax.swing.JFrame {
         setImageLabel(fontLabel, "src/main/java/com/josh/resources/Skywallpaper.png");
 
         //
+        /*
         try(Connection conn = DataBaseConnect.getConnection()){
                 CallableStatement sv = conn.prepareCall("{call GETBOARD(?)}");
                 sv.registerOutParameter(1, Types.REF_CURSOR);
@@ -58,13 +60,14 @@ public class BoardsMenu extends javax.swing.JFrame {
                     auxBoard.setBoardDesc(rs.getString("BOARD_DESC"));
                     auxBoard.setLimitDate(rs.getString("LIMIT_DATE"));
                     
-                    boardList.add(auxBoard);
+                  //  boardList.add(auxBoard);
                     listModel.addElement(rs.getString("NAME"));
                 }
                 
         } catch (SQLException ex){
             System.out.println(ex);
         }
+        */
     }
     
     private void setImageLabel(JLabel label, String imageRute){
@@ -127,6 +130,11 @@ public class BoardsMenu extends javax.swing.JFrame {
         OpenBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         OpenBoard.setText("Abrir Tablonario");
         OpenBoard.setEnabled(false);
+        OpenBoard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenBoardActionPerformed(evt);
+            }
+        });
         fontPanel.add(OpenBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 90, 170, 40));
 
         ListBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -182,8 +190,8 @@ public class BoardsMenu extends javax.swing.JFrame {
         int opt = JOptionPane.showOptionDialog(null,"Esta a punto de eliminar el tablonario seleccionado\n\n¿Desea eliminarlo?", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
         
         if(opt == 0){
-            boardList.get(ListBoard.getSelectedIndex()).deleteBoardDatabase(ListBoard.getSelectedIndex());
-            boardList.remove(ListBoard.getSelectedIndex());
+           // boardsList.get(ListBoard.getSelectedIndex()).deleteBoardDatabase(ListBoard.getSelectedIndex());
+            boardsList.remove(ListBoard.getSelectedIndex());
             listModel.remove(ListBoard.getSelectedIndex());
             OpenBoard.setEnabled(false);
             DeleteBoard.setEnabled(false);
@@ -192,17 +200,23 @@ public class BoardsMenu extends javax.swing.JFrame {
 
     private void ShowInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowInfoActionPerformed
             
-        System.out.println("ID: " + boardList.get(ListBoard.getSelectedIndex()).getID());
-        System.out.println("Nombre: " + boardList.get(ListBoard.getSelectedIndex()).getName());
-        System.out.println("Propietario: " + boardList.get(ListBoard.getSelectedIndex()).getOwner());
-        System.out.println("Cantidad de numeros: " + boardList.get(ListBoard.getSelectedIndex()).getNumAmount());
-        System.out.println("Cantidad de ganadores: " + boardList.get(ListBoard.getSelectedIndex()).getWinAmount());
-        System.out.println("Valor por numero: " + boardList.get(ListBoard.getSelectedIndex()).getNumPrice());
-        System.out.println("Premio: " + boardList.get(ListBoard.getSelectedIndex()).getPrize());
-        System.out.println("Descripcion: " + boardList.get(ListBoard.getSelectedIndex()).getBoardDesc());
-        System.out.println("Fecha limite: " + boardList.get(ListBoard.getSelectedIndex()).getLimitDate() + "\n");
+   
             
     }//GEN-LAST:event_ShowInfoActionPerformed
+
+    private void OpenBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenBoardActionPerformed
+  
+     BoardTickets view=new BoardTickets();
+     
+        System.out.println( boardsList.get(ListBoard.getSelectedIndex()).getNumAmount());
+        
+             view.initRows( ListBoard.getSelectedIndex());
+
+      
+        view.setVisible(true);
+
+        this.dispose();        // TODO add your handling code here:        // TODO add your handling code here:
+    }//GEN-LAST:event_OpenBoardActionPerformed
 
     /**
      * @param args the command line arguments

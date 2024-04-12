@@ -3,12 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.josh.numberboard;
+import static  com.josh.numberboard.BoardsMenu.boardsList;
 
-import static com.josh.numberboard.StartMenu.boardWindow;
+import static com.josh.numberboard.BoardsMenu.listModel;
+//import static com.josh.numberboard.StartMenu.boardWindow;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+
 
 /**
  *
@@ -220,7 +224,7 @@ public class AddBoard extends javax.swing.JFrame {
 
     private void ConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmButtonActionPerformed
 
-        boardWindow.addElementList(BoardName.getText());
+        //boardWindow.addElementList(BoardName.getText());
         String name = BoardName.getText();
         String owner = BoardOwner.getText();
         int numAmount = Integer.parseInt(BoardNumbers.getText());
@@ -236,8 +240,9 @@ public class AddBoard extends javax.swing.JFrame {
         }
         date = date + year;
         Boards newBoard = new Boards(name, owner, numAmount, winAmount, numPrice, prize, boardDesc, date);
-        boardWindow.boardList.add(newBoard);
-        
+ boardsList.add(newBoard);
+
+     listModel.addElement(newBoard.getName());        
         this.dispose();
         //clean form
         BoardName.setText("");
