@@ -17,6 +17,22 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.awt.*;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.WriterException;
+import java.awt.image.BufferedImage;
+import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.WriterException;
+import static com.josh.numberboard.Boards.displayQRImage;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -116,7 +132,7 @@ public class BoardsMenu extends javax.swing.JFrame {
                 DeleteBoardActionPerformed(evt);
             }
         });
-        fontPanel.add(DeleteBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 150, 170, 40));
+        fontPanel.add(DeleteBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 120, 170, 40));
 
         createBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         createBoard.setText("Nuevo Tablonario");
@@ -125,7 +141,7 @@ public class BoardsMenu extends javax.swing.JFrame {
                 createBoardActionPerformed(evt);
             }
         });
-        fontPanel.add(createBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, 170, 40));
+        fontPanel.add(createBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 10, 170, 40));
 
         OpenBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         OpenBoard.setText("Abrir Tablonario");
@@ -135,7 +151,7 @@ public class BoardsMenu extends javax.swing.JFrame {
                 OpenBoardActionPerformed(evt);
             }
         });
-        fontPanel.add(OpenBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 90, 170, 40));
+        fontPanel.add(OpenBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 70, 170, 40));
 
         ListBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         ListBoard.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -149,13 +165,13 @@ public class BoardsMenu extends javax.swing.JFrame {
 
         fontPanel.add(ScrollListBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 300, 340));
 
-        ShowInfo.setText("ver info");
+        ShowInfo.setText("VER QR");
         ShowInfo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ShowInfoActionPerformed(evt);
             }
         });
-        fontPanel.add(ShowInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 340, -1, -1));
+        fontPanel.add(ShowInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 360, 120, 40));
         fontPanel.add(fontLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 420));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,7 +216,27 @@ public class BoardsMenu extends javax.swing.JFrame {
 
     private void ShowInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowInfoActionPerformed
             
-   
+         int selectedIndex = ListBoard.getSelectedIndex();
+
+    if (selectedIndex != -1) { // Si se ha seleccionado un elemento válido
+        // Obtener el objeto Boards correspondiente
+        Boards selectedBoard = boardsList.get(selectedIndex);
+
+        // Obtener el QR asociado al objeto Boards
+        BufferedImage qrImage = selectedBoard.getQrImage();
+
+        if (qrImage != null) { // Si se ha generado un QR válido
+            // Mostrar el QR en una nueva ventana
+            displayQRImage(qrImage,30 ,30);
+        } else {
+            // Mostrar un mensaje de error si no se ha generado un QR válido
+            JOptionPane.showMessageDialog(this, "No se ha generado un código QR para este elemento.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        // Mostrar un mensaje si no se ha seleccionado ningún elemento
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un elemento de la lista.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+  
             
     }//GEN-LAST:event_ShowInfoActionPerformed
 
@@ -263,4 +299,10 @@ public class BoardsMenu extends javax.swing.JFrame {
     private javax.swing.JLabel fontLabel;
     private javax.swing.JPanel fontPanel;
     // End of variables declaration//GEN-END:variables
+
+    static class boards {
+
+        public boards() {
+        }
+    }
 }
