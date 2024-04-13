@@ -4,14 +4,7 @@
  */
 package com.josh.numberboard;
 
-import ConexionSQLDB.DataBaseConnect;
 import java.awt.Image;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -25,10 +18,7 @@ import javax.swing.JOptionPane;
 public class BoardsMenu extends javax.swing.JFrame {
 
     
- public static   DefaultListModel listModel=new DefaultListModel();
-    
-  public static  ArrayList<Boards> boardsList= new ArrayList<>();
-    
+    DefaultListModel listModel;
     /**
      * Creates new form BoardsMenu
      */
@@ -37,40 +27,11 @@ public class BoardsMenu extends javax.swing.JFrame {
         listModel = new DefaultListModel();
         ListBoard.setModel(listModel);
         setImageLabel(fontLabel, "src/main/java/com/josh/resources/Skywallpaper.png");
-
-        //
-        try(Connection conn = DataBaseConnect.getConnection()){                      //BD
-                CallableStatement sv = conn.prepareCall("{call GETBOARD(?)}");     //BD
-                sv.registerOutParameter(1, Types.REF_CURSOR);                           //BD
-                sv.execute();                                                                                         //BD
-                
-                ResultSet rs = (ResultSet) sv.getObject(1);                                         //BD
-                while(rs.next()){                                                                                    //BD
-                    
-                    Boards auxBoard = new Boards();                                                  //BD
-                    
-                    auxBoard.setID(rs.getInt("BOARD_ID"));                                        //BD
-                    auxBoard.setName(rs.getString("NAME"));                                    //BD
-                    auxBoard.setOwner(rs.getString("OWNER"));                                //BD
-                    auxBoard.setNumAmount(rs.getInt("NUM_AMOUNT"));                 //BD
-                    auxBoard.setWinAmount(rs.getInt("WIN_AMOUNT"));                   //BD
-                    auxBoard.setNumPrice(rs.getInt("NUM_PRICE"));                        //BD
-                    auxBoard.setPrize(rs.getString("PRIZE"));                                     //BD
-                    auxBoard.setBoardDesc(rs.getString("BOARD_DESC"));             //BD
-                    auxBoard.setLimitDate(rs.getString("LIMIT_DATE"));                    //BD
-                    
-                  boardsList.add(auxBoard);
-                  listModel.addElement(rs.getString("NAME"));
-                }
-                
-        } catch (SQLException ex){
-            System.out.println(ex);
-        }
-<<<<<<< Updated upstream
         
-=======
-        //
->>>>>>> Stashed changes
+        //añadir elementos de prueba
+        listModel.addElement("tablonario 1");
+        listModel.addElement("tablonario 2");
+        listModel.addElement("tablonario 3");
     }
     
     private void setImageLabel(JLabel label, String imageRute){
@@ -103,7 +64,6 @@ public class BoardsMenu extends javax.swing.JFrame {
         OpenBoard = new javax.swing.JButton();
         ScrollListBoard = new javax.swing.JScrollPane();
         ListBoard = new javax.swing.JList<>();
-        ShowInfo = new javax.swing.JButton();
         fontLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -133,14 +93,14 @@ public class BoardsMenu extends javax.swing.JFrame {
         OpenBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         OpenBoard.setText("Abrir Tablonario");
         OpenBoard.setEnabled(false);
-        OpenBoard.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OpenBoardActionPerformed(evt);
-            }
-        });
         fontPanel.add(OpenBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 90, 170, 40));
 
         ListBoard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        ListBoard.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "tablonario 1", "tablonario 2", "tablonario 3" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
         ListBoard.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         ListBoard.setOpaque(false);
         ListBoard.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -151,14 +111,6 @@ public class BoardsMenu extends javax.swing.JFrame {
         ScrollListBoard.setViewportView(ListBoard);
 
         fontPanel.add(ScrollListBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 300, 340));
-
-        ShowInfo.setText("ver info");
-        ShowInfo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ShowInfoActionPerformed(evt);
-            }
-        });
-        fontPanel.add(ShowInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 340, -1, -1));
         fontPanel.add(fontLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 420));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -189,39 +141,15 @@ public class BoardsMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_ListBoardMouseClicked
 
     private void DeleteBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBoardActionPerformed
-        String[] options = {"OK", "Cancelar"};
+        String[] options = {"Cancelar", "Ok"};
         int opt = JOptionPane.showOptionDialog(null,"Esta a punto de eliminar el tablonario seleccionado\n\n¿Desea eliminarlo?", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
         
-        if(opt == 0){
-           boardsList.get(ListBoard.getSelectedIndex()).deleteBoardDatabase(ListBoard.getSelectedIndex());    //BD
-            boardsList.remove(ListBoard.getSelectedIndex());
+        if(opt == 1){
             listModel.remove(ListBoard.getSelectedIndex());
             OpenBoard.setEnabled(false);
             DeleteBoard.setEnabled(false);
         }
     }//GEN-LAST:event_DeleteBoardActionPerformed
-
-    private void ShowInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowInfoActionPerformed
-            
-   
-            
-    }//GEN-LAST:event_ShowInfoActionPerformed
-
-    private void OpenBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenBoardActionPerformed
-<<<<<<< Updated upstream
-  
-     BoardTickets view = new BoardTickets();
-     
-     System.out.println( boardsList.get(ListBoard.getSelectedIndex()).getNumAmount());
-        
-     view.initRows(ListBoard.getSelectedIndex());
-     view.setVisible(true);
-
-     this.dispose();
-=======
-        // TODO add your handling code here:
->>>>>>> Stashed changes
-    }//GEN-LAST:event_OpenBoardActionPerformed
 
     /**
      * @param args the command line arguments
@@ -263,7 +191,6 @@ public class BoardsMenu extends javax.swing.JFrame {
     private javax.swing.JList<String> ListBoard;
     private javax.swing.JButton OpenBoard;
     private javax.swing.JScrollPane ScrollListBoard;
-    private javax.swing.JButton ShowInfo;
     private javax.swing.JButton createBoard;
     private javax.swing.JLabel fontLabel;
     private javax.swing.JPanel fontPanel;
