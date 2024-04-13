@@ -17,7 +17,11 @@
     <artifactId>ojdbc8</artifactId>
     <version>23.3.0.23.09</version>
 </dependency>
-
+        <dependency>
+            <groupId>qr1</groupId>
+            <artifactId>qr1</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
