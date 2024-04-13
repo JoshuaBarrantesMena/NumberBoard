@@ -66,7 +66,11 @@ public class BoardsMenu extends javax.swing.JFrame {
         } catch (SQLException ex){
             System.out.println(ex);
         }
+<<<<<<< Updated upstream
         
+=======
+        //
+>>>>>>> Stashed changes
     }
     
     private void setImageLabel(JLabel label, String imageRute){
@@ -204,6 +208,7 @@ public class BoardsMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_ShowInfoActionPerformed
 
     private void OpenBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenBoardActionPerformed
+<<<<<<< Updated upstream
   
      BoardTickets view = new BoardTickets();
      
@@ -213,6 +218,9 @@ public class BoardsMenu extends javax.swing.JFrame {
      view.setVisible(true);
 
      this.dispose();
+=======
+        // TODO add your handling code here:
+>>>>>>> Stashed changes
     }//GEN-LAST:event_OpenBoardActionPerformed
 
     /**
