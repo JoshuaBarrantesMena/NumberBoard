@@ -43,7 +43,7 @@ public class Boards {
         this.boardDesc = boardDesc;
         this.limitDate = limitDate;
         
-        sendDatabaseValues();
+        sendDatabaseValues();                                  //BD
     }
     
     public Boards(int id, String name, String owner, int numAmount, int winAmount, int numPrice, String prize, String boardDesc, String limitDate){
@@ -87,10 +87,11 @@ public class Boards {
             sendValues.setString(8, limitDate);
             sendValues.setInt(9, ID);
             
-            sendValues.executeQuery(); //ejecutar el comando deseado
+            sendValues.executeQuery();
              
         } catch (SQLException ex) {
             Logger.getLogger(Boards.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("No envio los datos");
         }
 
     }
