@@ -77,7 +77,7 @@ public class Boards {
                 System.out.println("no recibe maxID");
             }
             
-            sendValues = cnx.prepareCall("{call INSERTBOARD(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+            sendValues = cnx.prepareCall("{call BOARD_INSERT(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
             sendValues.setString(1, name);
             sendValues.setString(2,  owner);
             sendValues.setInt(3, numAmount);
@@ -88,7 +88,7 @@ public class Boards {
             sendValues.setString(8, limitDate);
             sendValues.setInt(9, ID);
             
-            sendValues.executeQuery(); //ejecutar el comando deseado
+            sendValues.executeQuery();
              
         } catch (SQLException ex) {
             Logger.getLogger(Boards.class.getName()).log(Level.SEVERE, null, ex);
@@ -101,7 +101,7 @@ public class Boards {
         CallableStatement sendValues;
         
         try{
-            sendValues = cnx.prepareCall("{call DELETEBOARD(?)}");
+            sendValues = cnx.prepareCall("{call BOARD_DELETE(?)}");
             sendValues.setInt(1, ID);
             
             sendValues.executeQuery();

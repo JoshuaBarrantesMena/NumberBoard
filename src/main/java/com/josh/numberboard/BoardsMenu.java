@@ -40,7 +40,7 @@ public class BoardsMenu extends javax.swing.JFrame {
 
         //
         try(Connection conn = DataBaseConnect.getConnection()){
-                CallableStatement sv = conn.prepareCall("{call GETBOARD(?)}");
+                CallableStatement sv = conn.prepareCall("{call BOARD_GET(?)}");
                 sv.registerOutParameter(1, Types.REF_CURSOR);
                 sv.execute();
                 
@@ -57,7 +57,9 @@ public class BoardsMenu extends javax.swing.JFrame {
                     auxBoard.setNumPrice(rs.getInt("NUM_PRICE"));
                     auxBoard.setPrize(rs.getString("PRIZE"));
                     auxBoard.setBoardDesc(rs.getString("BOARD_DESC"));
-                    auxBoard.setLimitDate(rs.getString("LIMIT_DATE"));                      
+                    
+                    String date = rs.getString("LIMIT_DATE");                      
+                    auxBoard.setLimitDate("20" + date.substring(2, date.length()));
                     
                     boardsList.add(auxBoard);
                     listModel.addElement(rs.getString("NAME"));

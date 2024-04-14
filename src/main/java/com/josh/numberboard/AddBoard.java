@@ -232,13 +232,8 @@ public class AddBoard extends javax.swing.JFrame {
         int numPrice = Integer.parseInt(BoardPrice.getText());
         String prize = BoardPrize.getText();
         String boardDesc = BoardDescText.getText();
-        String date = BoardDay.getText() + "/" + BoardMonth.getText() + "/";
+        String date = BoardDay.getText() + "/" + BoardMonth.getText() + "/" + BoardYear.getText();
         
-        String year = "", aux  = BoardYear.getText();
-        if(aux.length()-1 > 2){
-            year = aux.substring(aux.length()-2);
-        }
-        date = date + year;
         Boards newBoard = new Boards(name, owner, numAmount, winAmount, numPrice, prize, boardDesc, date);
         boardsList.add(newBoard);
 
