@@ -3,21 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.josh.numberboard;
+import static  com.josh.numberboard.BoardsMenu.boardsList;
+
+import static com.josh.numberboard.BoardsMenu.listModel;
+//import static com.josh.numberboard.StartMenu.boardWindow;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import static  com.josh.numberboard.BoardsMenu.boardsList;
-import com.josh.numberboard.BoardsMenu.boards;
-import static com.josh.numberboard.BoardsMenu.listModel;
-//import static com.josh.numberboard.StartMenu.boardWindow;
-import javax.swing.*;
-import java.awt.*;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.WriterException;
-import java.awt.image.BufferedImage;
 
 
 
@@ -232,7 +225,6 @@ public class AddBoard extends javax.swing.JFrame {
     private void ConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmButtonActionPerformed
 
         //boardWindow.addElementList(BoardName.getText());
-       //boardWindow.addElementList(BoardName.getText());
         String name = BoardName.getText();
         String owner = BoardOwner.getText();
         int numAmount = Integer.parseInt(BoardNumbers.getText());
@@ -247,20 +239,11 @@ public class AddBoard extends javax.swing.JFrame {
             year = aux.substring(aux.length()-2);
         }
         date = date + year;
-        String qrData = "Nombre: " + name + "\nFecha Límite: " + date + "\nPremio: " + prize;
-        
-    BufferedImage qrImage = Boards.generateQR(qrData);
-     Boards newBoard = new Boards(name, owner, numAmount, winAmount, numPrice, prize, boardDesc, date,qrImage);
-    
-        
- boardsList.add(newBoard);
+        Boards newBoard = new Boards(name, owner, numAmount, winAmount, numPrice, prize, boardDesc, date);
+        boardsList.add(newBoard);
 
-     listModel.addElement(newBoard.getName());        
+        listModel.addElement(newBoard.getName());        
         this.dispose();
-        
-        
-         
-        
         //clean form
         BoardName.setText("");
         BoardNumbers.setText("");

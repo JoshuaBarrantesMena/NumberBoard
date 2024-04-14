@@ -19,15 +19,16 @@ import java.util.logging.Logger;
  */
 public class Boards {
     
-    private static int ID;
-    private static String name;
-    private static String owner;
-    private static int numAmount;
-    private static int winAmount;
-    private static int numPrice;
-    private static String prize;
-    private static String boardDesc;
-    private static String limitDate;
+    private Numbers[] numbers;
+    private int ID;
+    private String name;
+    private String owner;
+    private int numAmount;
+    private int winAmount;
+    private int numPrice;
+    private String prize;
+    private String boardDesc;
+    private String limitDate;
     
     public Boards(){
         
@@ -42,17 +43,41 @@ public class Boards {
         this.prize = prize;
         this.boardDesc = boardDesc;
         this.limitDate = limitDate;
-        
+        numbers=new Numbers[numAmount];
         sendDatabaseValues();
+    }
+    
+    public Boards(int id, String name, String owner, int numAmount, int winAmount, int numPrice, String prize, String boardDesc, String limitDate){
+        this.ID = id;
+        this.name = name;
+        this.owner = owner;
+        this.numAmount = numAmount;
+        this.winAmount = winAmount;
+        this.numPrice = numPrice;
+        this.prize = prize;
+        this.boardDesc = boardDesc;
+        this.limitDate = limitDate;
+        
     }
     
     private void sendDatabaseValues(){
         Connection cnx = DataBaseConnect.getConnection();
-       CallableStatement sendValues;
-       Statement maxID;
+        CallableStatement sendValues;
+        Statement maxID;
+        ResultSet result;
         try {
             
-            sendValues = cnx.prepareCall("{call INSERTBOARD(?, ?, ?, ?, ?, ?, ?, ?)}");
+            try{
+            maxID = cnx.createStatement();
+            result = maxID.executeQuery("select max(BOARD_ID) from BOARD_NUM_INFO");
+            while(result.next()){
+            ID = result.getInt("max(BOARD_ID)") + 1;
+            }
+            }catch(SQLException ex){
+                System.out.println("no recibe maxID");
+            }
+            
+            sendValues = cnx.prepareCall("{call INSERTBOARD(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
             sendValues.setString(1, name);
             sendValues.setString(2,  owner);
             sendValues.setInt(3, numAmount);
@@ -61,88 +86,109 @@ public class Boards {
             sendValues.setString(6, prize);
             sendValues.setString(7, boardDesc);
             sendValues.setString(8, limitDate);
+            sendValues.setInt(9, ID);
             
-            ResultSet result = sendValues.executeQuery();
-            
-            maxID = cnx.createStatement();
-            result = maxID.executeQuery("select max(BOARD_ID) from BOARD_NUM_INFO");
-            ID = result.getInt("max(BOARD_ID)");
-            
+            sendValues.executeQuery(); //ejecutar el comando deseado
+             
         } catch (SQLException ex) {
             Logger.getLogger(Boards.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
+    
+    public void deleteBoardDatabase(int ID){
+        Connection cnx = DataBaseConnect.getConnection();
+        CallableStatement sendValues;
+        
+        try{
+            sendValues = cnx.prepareCall("{call DELETEBOARD(?)}");
+            sendValues.setInt(1, ID);
+            
+            sendValues.executeQuery();
+            
+        }catch (SQLException ex) {
+            Logger.getLogger(Boards.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-    public static int getID() {
+    public int getID() {
         return ID;
     }
 
-    public static void setID(int aID) {
+    public void setID(int aID) {
         ID = aID;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
-    public static void setName(String aName) {
+    public void setName(String aName) {
         name = aName;
     }
 
-    public static String getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public static void setOwner(String aOwner) {
+    public void setOwner(String aOwner) {
         owner = aOwner;
     }
 
-    public static int getNumAmount() {
+    public int getNumAmount() {
         return numAmount;
     }
 
-    public static void setNumAmount(int aNumAmount) {
+    public void setNumAmount(int aNumAmount) {
         numAmount = aNumAmount;
     }
 
-    public static int getWinAmount() {
+    public int getWinAmount() {
         return winAmount;
     }
 
-    public static void setWinAmount(int aWinAmount) {
+    public void setWinAmount(int aWinAmount) {
         winAmount = aWinAmount;
     }
 
-    public static int getNumPrice() {
+    public int getNumPrice() {
         return numPrice;
     }
 
-    public static void setNumPrice(int aNumPrice) {
+    public void setNumPrice(int aNumPrice) {
         numPrice = aNumPrice;
     }
 
-    public static String getPrize() {
+    public String getPrize() {
         return prize;
     }
 
-    public static void setPrize(String aPrize) {
+    public void setPrize(String aPrize) {
         prize = aPrize;
     }
 
-    public static String getBoardDesc() {
+    public String getBoardDesc() {
         return boardDesc;
     }
 
-    public static void setBoardDesc(String aBoardDesc) {
+    public void setBoardDesc(String aBoardDesc) {
         boardDesc = aBoardDesc;
     }
 
-    public static String getLimitDate() {
+    public String getLimitDate() {
         return limitDate;
     }
 
-    public static void setLimitDate(String aLimitDate) {
+    public void setLimitDate(String aLimitDate) {
         limitDate = aLimitDate;
+    }
+    public int getNumberState(int index){
+        
+        return numbers[index].getPayState();
+    }
+    
+    public void setNumbersState(int index, int state){
+        
+        numbers[index].setPayState(state);
     }
 }

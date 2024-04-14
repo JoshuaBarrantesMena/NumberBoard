@@ -21,30 +21,27 @@ public class BoardTickets extends javax.swing.JFrame {
      * Creates new form BoardTickets
      */
     
-    private  int rows;
+         int rows;
+
+            int rowsIndex;
+            int listIndex;
     public BoardTickets( ) {
         initComponents();
         setLocationRelativeTo(null);
-        // ticketsButtons();
-      
-         
+        
+          //ticketsButtons();
     }
 
 
-    
-            int rowsIndex;
+     
 
-    int ticketWidth=60;
-    int ticketSize=140;
-    int axisX=20;
-    int axisY=20;
-        
+
     public void initRows(int num){
         System.out.println(num);
-    rows=  boardsList.get(num).getNumAmount();
-  //  rows=100;
-
-   jLabel1.setText( boardsList.get(num).getName());
+        rows=  boardsList.get(num).getNumAmount();
+        //rows=100;
+        listIndex=num;
+        jLabel1.setText( boardsList.get(num).getName());
     ticketsButtons();
     }
     
@@ -54,10 +51,9 @@ public class BoardTickets extends javax.swing.JFrame {
                 int ticketCounter=0;
             ticketsButtonsArray= new JToggleButton[rows];
             
-                for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
+                for (rowsIndex = 0; rowsIndex < rows; rowsIndex++) {
               
                             ticketsButtonsArray[rowsIndex] = new JToggleButton();
-                              ticketsButtonsArray[rowsIndex].setBounds(axisX, axisY, ticketSize, ticketWidth);
                               ticketsButtonsArray[rowsIndex].setText("Numero "+ ticketCounter);
                               
                                ActionTicketsButtons action= new  ActionTicketsButtons();
@@ -67,10 +63,7 @@ public class BoardTickets extends javax.swing.JFrame {
                         
                         
                         ticketCounter++;
-                        axisX += 160;
-                    
-                    axisX=20;
-                    axisY+=70;
+            
                 }
             }
          
@@ -89,19 +82,27 @@ public class BoardTickets extends javax.swing.JFrame {
                       
                         if(ae.getSource().equals(ticketsButtonsArray[rowsIndex]))
                         {
-                        if(ticketsButtonsArray[rowsIndex].isSelected())
-                        {
-                            ticketsButtonsArray[rowsIndex].setBackground(Color.RED);
-                        }
-                        else
-                        {
-                                                        ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);                
-                        }
+                                  if(ticketsButtonsArray[rowsIndex].isSelected())
+                                  {
+                            System.out.println(listIndex);
+                            boardsList.get(listIndex).setNumbersState(rowsIndex,0);       // 0 para numeros reservados
+                                                        
+
+                                    
+                           ticketsButtonsArray[rowsIndex].setBackground(Color.LIGHT_GRAY);
+                                  }
+                                  else
+                                  {
+                                                     // boardsList.get(listIndex).setNumbersState(rowsIndex,0);    // 1 para numeros disponibles
+                                                      //  ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);
+                                                        
+                                                           
+                                  }
                         }
                 
-                        }
+                 }
         }
-          }
+  }
      
     public void reserveTickets()
     {
@@ -197,7 +198,7 @@ public class BoardTickets extends javax.swing.JFrame {
         jLabel4.setText("Numeros pagados");
 
         jButton2.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jButton2.setText("Pagar numeros");
+        jButton2.setText("Pagar o reservar numeros");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -291,12 +292,25 @@ public class BoardTickets extends javax.swing.JFrame {
 
                    int rowsIndex;
        
+   
+
             
                 for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
           
+                    if (boardsList.get(listIndex). getNumberState(rowsIndex)==0) {
+
+                       //BuyTickets newBoard = new BuyTickets();
+                       //newBoard.getListIndex(listIndex);
+                       //newBoard.setLocationRelativeTo(null);
+                       //newBoard.setVisible(true);
+                        
+                        
+                    }
                         
                          if (    ticketsButtonsArray[rowsIndex].getBackground()== aux.getBackground()) {
                             
+                                  //boardsList.get(listIndex).setNumbersState(rowsIndex,3);    // 3 para numeros pagados
+
                                   ticketsButtonsArray[rowsIndex].setBackground(Color.YELLOW);                
 
                         }
