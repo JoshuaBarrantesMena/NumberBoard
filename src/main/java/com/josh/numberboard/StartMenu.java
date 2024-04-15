@@ -4,22 +4,13 @@
  */
 package com.josh.numberboard;
 
-import ConexionSQLDB.DataBaseConnect;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.Timer;
-
 /**
  *
  * @author Josh
@@ -27,8 +18,6 @@ import javax.swing.Timer;
 public class StartMenu extends javax.swing.JFrame {
 
     public static BoardsMenu boardWindow;
-    
-    
     /**
      * Creates new form StartMenu
      */
@@ -93,10 +82,10 @@ public class StartMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
-       SplashScreen splashScreen = new SplashScreen();
+        SplashScreen splashScreen = new SplashScreen();
     
   
-    Timer timer = new Timer(10, new ActionListener() {
+        Timer timer = new Timer(10, new ActionListener() {
         private int progress = 0;
         
         @Override
@@ -105,31 +94,22 @@ public class StartMenu extends javax.swing.JFrame {
             progress++;
             
             splashScreen.setProgress(progress);
-            
-           
+
             if (progress == 100) {
                 ((Timer) e.getSource()).stop();
-                
-             
+
                 boardWindow = new BoardsMenu();
                 boardWindow.setLocationRelativeTo(null);
                 boardWindow.setVisible(true);
-                
-               
+
                 splashScreen.dispose();
-                
                
                 dispose();
             }
         }
     });
-    
-    
+
     timer.start();
-        
-           
-        
-        
     }//GEN-LAST:event_StartActionPerformed
 
     /**

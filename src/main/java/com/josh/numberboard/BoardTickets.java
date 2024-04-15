@@ -20,35 +20,29 @@ public class BoardTickets extends javax.swing.JFrame {
     /**
      * Creates new form BoardTickets
      */
-    
-         int rows;
+    int rows;
 
-            int rowsIndex;
-            int listIndex;
+    int rowsIndex;
+    int listIndex;
     public BoardTickets( ) {
+        
         initComponents();
         setLocationRelativeTo(null);
         
-          //ticketsButtons();
     }
-
-
-     
-
 
     public void initRows(int num){
         System.out.println(num);
         rows=  boardsList.get(num).getNumAmount();
-        //rows=100;
         listIndex=num;
         jLabel1.setText( boardsList.get(num).getName());
-    ticketsButtons();
+        ticketsButtons();
     }
     
          public JToggleButton [] ticketsButtonsArray= new JToggleButton[rows];
-          public void ticketsButtons()
-            {
-                int ticketCounter=0;
+         public void ticketsButtons(){
+             
+            int ticketCounter=0;
             ticketsButtonsArray= new JToggleButton[rows];
             
                 for (rowsIndex = 0; rowsIndex < rows; rowsIndex++) {
@@ -205,7 +199,7 @@ public class BoardTickets extends javax.swing.JFrame {
             }
         });
 
-        ticketsPanel.setLayout(new java.awt.GridLayout(0, 4, 20, 20));
+        ticketsPanel.setLayout(new java.awt.GridLayout(0, 8, 20, 20));
         jScrollPane1.setViewportView(ticketsPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
