@@ -4,16 +4,12 @@
  */
 package com.josh.numberboard;
 import static  com.josh.numberboard.BoardsMenu.boardsList;
-
 import static com.josh.numberboard.BoardsMenu.listModel;
 //import static com.josh.numberboard.StartMenu.boardWindow;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
-
-
 /**
  *
  * @author Josh
@@ -347,9 +343,6 @@ public class AddBoard extends javax.swing.JFrame {
         });
     }
     
-    
-    
-    
    private javax.swing.JLabel creatingLabel; 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField BoardDay;
@@ -379,4 +372,3 @@ public class AddBoard extends javax.swing.JFrame {
     private javax.swing.JLabel name;
     // End of variables declaration//GEN-END:variables
 }
-

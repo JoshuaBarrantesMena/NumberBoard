@@ -5,10 +5,17 @@
 package com.josh.numberboard;
 
 import static com.josh.numberboard.BoardsMenu.boardsList;
+import static com.josh.numberboard.BuyTickets.clientsList;
+import static com.josh.numberboard.BuyTickets.selectedNumsList;
 import static com.josh.numberboard.StartMenu.boardWindow;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.HashSet;
+import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 
 /**
@@ -20,77 +27,159 @@ public class BoardTickets extends javax.swing.JFrame {
     /**
      * Creates new form BoardTickets
      */
-    int rows;
+    
+         int rows;
 
-    int rowsIndex;
-    int listIndex;
+            int rowsIndex;
+            int Index;
+            String aux;
+                MouseListener myMouse;
+
     public BoardTickets( ) {
-        
         initComponents();
         setLocationRelativeTo(null);
         
+         // ticketsButtons();
+
+         
     }
+
+
+     
+
 
     public void initRows(int num){
         System.out.println(num);
-        rows=  boardsList.get(num).getNumAmount();
-        listIndex=num;
-        jLabel1.setText( boardsList.get(num).getName());
-        ticketsButtons();
+   rows=  boardsList.get(num).getNumAmount();
+Index=num;
+   jLabel1.setText( boardsList.get(num).getName());
+    ticketsButtons();
     }
     
-         public JToggleButton [] ticketsButtonsArray= new JToggleButton[rows];
-         public void ticketsButtons(){
-             
-            int ticketCounter=0;
+    
+   public JToggleButton [] ticketsButtonsArray= new JToggleButton[rows];
+          public void ticketsButtons()
+            {
+                int ticketCounter=0;
             ticketsButtonsArray= new JToggleButton[rows];
             
-                for (rowsIndex = 0; rowsIndex < rows; rowsIndex++) {
+                for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
               
                             ticketsButtonsArray[rowsIndex] = new JToggleButton();
                               ticketsButtonsArray[rowsIndex].setText("Numero "+ ticketCounter);
-                              
+                    
                                ActionTicketsButtons action= new  ActionTicketsButtons();
+                      
                                 ticketsButtonsArray[rowsIndex].addActionListener(action);
                         ticketsPanel.add( ticketsButtonsArray[rowsIndex] );            
-                        ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);
                         
-                        
-                        ticketCounter++;
+                        if (boardsList.get(Index).getNumberState(rowsIndex)==0) {
+                            
+                                                ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);
+                          }
+                             if (boardsList.get(Index).getNumberState(rowsIndex)==2) {
+                                                ticketsButtonsArray[rowsIndex].setBackground(Color.RED);
+
+                             }
+                             if (boardsList.get(Index).getNumberState(rowsIndex)==3) {
+                                                ticketsButtonsArray[rowsIndex].setBackground(Color.YELLOW);
+                                                
+                  
+                                 }
+                             ticketCounter++;
             
                 }
             }
+          
+          public boolean verifySelectedNums(int index){
+              if (!selectedNumsList.isEmpty()) {
+                    for (int i = 0; i < selectedNumsList.size(); i++) {
+                  if(selectedNumsList.get(i)==index){
+                      return true;
+                  }
+              }
+              }
+            
+              return false;
+          }
          
-          public class ActionTicketsButtons implements ActionListener
-       {
+          public void gedClientInformation(String ID){
+              
+              for (int i = 0; i < clientsList.size(); i++) {
+                  if (clientsList.get(i).getID().equals(ID)) {
+  
+                      jLClientName.setText("Nombre: "+ clientsList.get(i).getName());
+                      jLClientID.setText("ID: "+ clientsList.get(i).getID());
+                              jLPhoneNumber.setText("Numero de telefono: "+ clientsList.get(i).getPhoneNumber());
+                  }
+                  
+              }
+          }
+         
+public class MouseOverButton implements MouseListener
+{
+        @Override
+        public void mouseClicked(MouseEvent e) {
+        }
 
         @Override
+        public void mousePressed(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            gedClientInformation(aux);
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+    
+}
+         
+
+     public class ActionTicketsButtons implements ActionListener
+       {
+        @Override
         public void actionPerformed(ActionEvent ae) {
-              int rowsIndex;
-        
-                
-                
+                                           MouseOverButton pepito=new MouseOverButton();
+
+              
                 for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) 
                 {
               
-                      
-                        if(ae.getSource().equals(ticketsButtonsArray[rowsIndex]))
+                               if (  ticketsButtonsArray[rowsIndex].getBackground()!=Color.GREEN) {
+                                   
+                                   aux=boardsList.get(Index).getNumID(rowsIndex);
+                            ticketsButtonsArray[rowsIndex].addMouseListener(pepito);
+                    
+                    }
+                           
+                    if (ae.getSource().equals(ticketsButtonsArray[rowsIndex])&&ticketsButtonsArray[rowsIndex].getBackground()==
+                            Color.RED&&!verifySelectedNums(rowsIndex)) {
+                        selectedNumsList.add(rowsIndex);
+                        
+                    }
+           
+                       
+                        if(ae.getSource().equals(ticketsButtonsArray[rowsIndex])&&ticketsButtonsArray[rowsIndex].getBackground()!=Color.YELLOW&&
+                              ticketsButtonsArray[rowsIndex].getBackground()!=Color.RED)
                         {
-                                  if(ticketsButtonsArray[rowsIndex].isSelected())
+                                  if(ticketsButtonsArray[rowsIndex].isSelected() && ticketsButtonsArray[rowsIndex].getBackground()==Color.GREEN)
                                   {
-                            System.out.println(listIndex);
-                            boardsList.get(listIndex).setNumbersState(rowsIndex,0);       // 0 para numeros reservados
-                                                        
-
-                                    
+                            System.out.println(Index);
+                            boardsList.get(Index).setNumbersState(rowsIndex,1);       // 1 para numeros seleccionados     
                            ticketsButtonsArray[rowsIndex].setBackground(Color.LIGHT_GRAY);
                                   }
+                                  
                                   else
                                   {
-                                                     // boardsList.get(listIndex).setNumbersState(rowsIndex,0);    // 1 para numeros disponibles
-                                                      //  ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);
-                                                        
-                                                           
+                                                      boardsList.get(Index).setNumbersState(rowsIndex,0);    // 0 para numeros disponibles
+                                                       ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);                                                   
                                   }
                         }
                 
@@ -98,15 +187,21 @@ public class BoardTickets extends javax.swing.JFrame {
         }
   }
      
-    public void reserveTickets()
-    {
+public void setEnabledButtons(int index){
     
-    }
-            
-       public void cancelReservetionTickets()
-    {
-    
-    }
+    ticketsButtonsArray[index].setEnabled(false);
+}
+       
+       public void changeStateButton(int posButton, int state){ // edit
+           if(state == 3){
+               ticketsButtonsArray[posButton].setBackground(Color.YELLOW);
+           }else if(state == 2){
+               ticketsButtonsArray[posButton].setBackground(Color.RED);
+           }else{
+           ticketsButtonsArray[posButton].setBackground(Color.GREEN);
+       }
+           ticketsButtonsArray[posButton].setSelected(false);
+       }
       
     /**
      * This method is called from within the constructor to initialize the form.
@@ -128,6 +223,22 @@ public class BoardTickets extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         ticketsPanel = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jTFFrom = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jTFTo = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jTBRandomNum = new javax.swing.JToggleButton();
+        jLRandomNum = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLClientName = new javax.swing.JLabel();
+        jLClientID = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLPhoneNumber = new javax.swing.JLabel();
+        jLPayMethod = new javax.swing.JLabel();
+        jLBuyDate = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -199,8 +310,89 @@ public class BoardTickets extends javax.swing.JFrame {
             }
         });
 
-        ticketsPanel.setLayout(new java.awt.GridLayout(0, 8, 20, 20));
+        ticketsPanel.setLayout(new java.awt.GridLayout(25, 0, 5, 5));
         jScrollPane1.setViewportView(ticketsPanel);
+
+        jLabel5.setText("Seleccionar numeros por rango");
+
+        jLabel6.setText("Del");
+
+        jTFFrom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFFromActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("al");
+
+        jButton3.setText("Seleccionar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jTBRandomNum.setText("Obtener numero aleatorio");
+        jTBRandomNum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTBRandomNumActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel8.setText("Informacion del propietario");
+
+        jLClientName.setText("Nombre: ");
+
+        jLClientID.setText("ID: ");
+
+        jLPhoneNumber.setText("Numero de telefono: ");
+
+        jLPayMethod.setText("Forma de pago:");
+
+        jLBuyDate.setText("Fecha de compra: ");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLClientName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addGap(113, 113, 113))
+                            .addComponent(jLClientID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLPhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLBuyDate)
+                            .addComponent(jLPayMethod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLClientName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLClientID)
+                .addGap(18, 18, 18)
+                .addComponent(jLPhoneNumber)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLPayMethod)
+                .addGap(18, 18, 18)
+                .addComponent(jLBuyDate)
+                .addContainerGap(198, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -226,18 +418,62 @@ public class BoardTickets extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(413, 413, 413)
-                        .addComponent(jLabel1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(84, 84, 84)
+                        .addComponent(jTBRandomNum)
+                        .addGap(26, 26, 26)
+                        .addComponent(jLRandomNum, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(135, 135, 135)
+                        .addComponent(jLabel1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5)
+                                .addGap(191, 191, 191))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(81, 81, 81)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTFFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel7)
+                                .addGap(31, 31, 31)
+                                .addComponent(jTFTo, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(jButton3)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 807, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTFTo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jTFFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel7)
+                                        .addComponent(jButton3))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jTBRandomNum, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLRandomNum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -270,6 +506,13 @@ public class BoardTickets extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
+            
+    for (int i = 0; i < rows; i++) {
+        if (ticketsButtonsArray[i].getBackground()==Color.LIGHT_GRAY) {
+                    boardsList.get(Index).setNumbersState(i,0);
+ticketsButtonsArray[i].setBackground(Color.GREEN);
+        }
+    }
         boardWindow.setVisible(true);
         this.dispose();
         
@@ -279,38 +522,113 @@ public class BoardTickets extends javax.swing.JFrame {
     
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-                        JToggleButton aux=new JToggleButton();
+        // TODO add your handling code here
 
-                        aux.setBackground(Color.red);
-
-                   int rowsIndex;
-       
+       boolean isNumSelected=false;
+       boolean reserveNums=false;
    
 
             
                 for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
           
-                    if (boardsList.get(listIndex). getNumberState(rowsIndex)==0) {
-
-                       //BuyTickets newBoard = new BuyTickets();
-                       //newBoard.getListIndex(listIndex);
-                       //newBoard.setLocationRelativeTo(null);
-                       //newBoard.setVisible(true);
+                if (boardsList.get(Index). getNumberState(rowsIndex)==2&& !selectedNumsList.isEmpty()){
+                    
+                    reserveNums=true;
+                    break;
+                    
+                }
+            
+                    if (boardsList.get(Index). getNumberState(rowsIndex)==1&&selectedNumsList.isEmpty()) {
                         
-                        
-                    }
-                        
-                         if (    ticketsButtonsArray[rowsIndex].getBackground()== aux.getBackground()) {
-                            
-                                  //boardsList.get(listIndex).setNumbersState(rowsIndex,3);    // 3 para numeros pagados
+                        isNumSelected=true;
+                        break;
+                    }                  
+                }
+                
+                if (reserveNums==true) {
+                    System.out.println("reserveNums true");
+                       BuyTickets newBoard = new BuyTickets();
+                       newBoard.getListIndex(Index,reserveNums);
+                       newBoard.setLocationRelativeTo(null);
+                       newBoard.setVisible(true);
+                 }
 
-                                  ticketsButtonsArray[rowsIndex].setBackground(Color.YELLOW);                
+                else if (isNumSelected==true) {
+                                        System.out.println("reserveNums false");
 
-                        }
-                    }
+                       BuyTickets newBoard = new BuyTickets();
+                       newBoard.getListIndex(Index,reserveNums);
+                       newBoard.setLocationRelativeTo(null);
+                       newBoard.setVisible(true);
+                 }
                 
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    public void selectNumbersByRange(){
+        
+        int from=Integer.parseInt(jTFFrom.getText());
+        int to=Integer.parseInt(jTFTo.getText());
+        boolean notAvailable=false;
+        
+           String[] options = {"OK", "Cancelar"};
+        
+        if (from<=to) {
+              for (int i = from; i <= to; i++) {
+            if (ticketsButtonsArray[i].getBackground()!=Color.GREEN) {
+       notAvailable=true;
+               int opt = JOptionPane.showOptionDialog(null,"Uno de los numeros en el rango seleccionado no se encuentra disponible \n\nIngrese un rango diferente", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
+                break; 
+            }
+        }
+              if (notAvailable==false) {
+                
+                   for (int i = from; i <= to; i++) {
+            if (ticketsButtonsArray[i].getBackground()==Color.GREEN) {
+                ticketsButtonsArray[i].setBackground(Color.LIGHT_GRAY);
+                boardsList.get(Index).setNumbersState(i, 1);
+                
+            }
+            
+        }
+            }
+              
+}
+             
+    }
+    
+    
+       public void generateRandomNum(){
+
+           int randomNum;
+           for (int i = 0; i < rows; i++) {
+               randomNum=(int) (Math.random() *rows);
+               if (ticketsButtonsArray[randomNum].getBackground()==Color.GREEN) {
+                   ticketsButtonsArray[randomNum].setBackground(Color.LIGHT_GRAY);
+                boardsList.get(Index).setNumbersState(randomNum, 1);
+                  jLRandomNum.setText(""+randomNum);
+                  jTBRandomNum.setSelected(false);
+
+                   break;
+               }
+               
+           }
+           
+
+}
+    
+    private void jTFFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFFromActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFFromActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+         selectNumbersByRange();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTBRandomNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTBRandomNumActionPerformed
+generateRandomNum();
+
+    }//GEN-LAST:event_jTBRandomNumActionPerformed
 
     /**
      * @param args the command line arguments
@@ -350,14 +668,30 @@ public class BoardTickets extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLBuyDate;
+    private javax.swing.JLabel jLClientID;
+    private javax.swing.JLabel jLClientName;
+    private javax.swing.JLabel jLPayMethod;
+    private javax.swing.JLabel jLPhoneNumber;
+    private javax.swing.JLabel jLRandomNum;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToggleButton jTBRandomNum;
+    private javax.swing.JTextField jTFFrom;
+    private javax.swing.JTextField jTFTo;
     private javax.swing.JPanel ticketsPanel;
     // End of variables declaration//GEN-END:variables
 }

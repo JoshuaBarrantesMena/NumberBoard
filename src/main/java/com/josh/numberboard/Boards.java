@@ -44,7 +44,14 @@ public class Boards {
         this.boardDesc = boardDesc;
         this.limitDate = limitDate;
         numbers=new Numbers[numAmount];
-        sendDatabaseValues();
+        
+        for (int i = 0; i < numAmount; i++) { 
+            
+            numbers[i]= new Numbers();
+            numbers[i].setPayState(0);
+            numbers[i].setPayMethod("");
+        }
+        sendDatabaseValues(); // DATABASE
     }
     
     public Boards(int id, String name, String owner, int numAmount, int winAmount, int numPrice, String prize, String boardDesc, String limitDate){
@@ -57,6 +64,14 @@ public class Boards {
         this.prize = prize;
         this.boardDesc = boardDesc;
         this.limitDate = limitDate;
+        this.numbers=new Numbers[numAmount];
+        
+        for (int i = 0; i < numAmount; i++) { 
+            
+            numbers[i]= new Numbers();
+            numbers[i].setPayState(0);
+            numbers[i].setPayMethod("");
+        }
         
     }
     
@@ -111,6 +126,10 @@ public class Boards {
         }
     }
 
+    public String getNumID(int index){
+       return numbers[index].getID();
+    }
+    
     public int getID() {
         return ID;
     }
@@ -141,6 +160,15 @@ public class Boards {
 
     public void setNumAmount(int aNumAmount) {
         numAmount = aNumAmount;
+        this.numbers=new Numbers[numAmount];
+        
+        for (int i = 0; i < numAmount; i++) { 
+            
+            numbers[i]= new Numbers();
+            numbers[i].setPayState(0);
+            numbers[i].setPayMethod("");
+        }
+        
     }
 
     public int getWinAmount() {
@@ -182,6 +210,7 @@ public class Boards {
     public void setLimitDate(String aLimitDate) {
         limitDate = aLimitDate;
     }
+    
     public int getNumberState(int index){
         
         return numbers[index].getPayState();
@@ -190,5 +219,19 @@ public class Boards {
     public void setNumbersState(int index, int state){
         
         numbers[index].setPayState(state);
+    }
+    
+    public void setNumberID(int index, String ID){
+        
+        numbers[index].setID(ID);
+    }
+         
+    public void setPayMethod(int index, String payMethod){
+        
+        numbers[index].setPayMethod(payMethod);
+          
+    }
+    public String getNumberID(int index){
+        return numbers[index].getID();
     }
 }

@@ -24,11 +24,11 @@ import javax.swing.JOptionPane;
  */
 public class BoardsMenu extends javax.swing.JFrame {
 
+public static   DefaultListModel listModel=new DefaultListModel();
+public static ArrayList<Clients>clientsList=new ArrayList<>();
+public static  ArrayList<Boards> boardsList = new ArrayList<>();
     
- public static   DefaultListModel listModel=new DefaultListModel();
-    
-  public static  ArrayList<Boards> boardsList = new ArrayList<>();
-    
+public static BoardTickets view;
     /**
      * Creates new form BoardsMenu
      */
@@ -38,7 +38,7 @@ public class BoardsMenu extends javax.swing.JFrame {
         ListBoard.setModel(listModel);
         setImageLabel(fontLabel, "src/main/java/com/josh/resources/Skywallpaper.png");
 
-        //
+        // DATABASE
         try(Connection conn = DataBaseConnect.getConnection()){
                 CallableStatement sv = conn.prepareCall("{call BOARD_GET(?)}");
                 sv.registerOutParameter(1, Types.REF_CURSOR);
@@ -68,6 +68,15 @@ public class BoardsMenu extends javax.swing.JFrame {
         } catch (SQLException ex){
             System.out.println(ex);
         }
+        // DATABASE
+        
+        Boards talonario= new Boards(101, "Vaca","Jos",100,3,100,"Vaca","aewrqwe","123");
+        boardsList.add(talonario);
+        listModel.addElement(talonario.getName());
+        Boards talonario2= new Boards(102, "Vacaas","Jos",100,3,100,"Vaca","aewrqwe","123");
+        boardsList.add(talonario2);
+        listModel.addElement(talonario2.getName());
+        
     }
     
     private void setImageLabel(JLabel label, String imageRute){
@@ -190,7 +199,7 @@ public class BoardsMenu extends javax.swing.JFrame {
         int opt = JOptionPane.showOptionDialog(null,"Esta a punto de eliminar el tablonario seleccionado\n\n¿Desea eliminarlo?", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
         
         if(opt == 0){
-            boardsList.get(ListBoard.getSelectedIndex()).deleteBoardDatabase(boardsList.get(ListBoard.getSelectedIndex()).getID());
+            boardsList.get(ListBoard.getSelectedIndex()).deleteBoardDatabase(boardsList.get(ListBoard.getSelectedIndex()).getID()); //DATABASE
             boardsList.remove(ListBoard.getSelectedIndex());
             listModel.remove(ListBoard.getSelectedIndex());
             OpenBoard.setEnabled(false);
@@ -214,7 +223,7 @@ public class BoardsMenu extends javax.swing.JFrame {
 
     private void OpenBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenBoardActionPerformed
   
-     BoardTickets view=new BoardTickets();
+    view=new BoardTickets();
      
         System.out.println( boardsList.get(ListBoard.getSelectedIndex()).getNumAmount());
         
@@ -258,6 +267,7 @@ public class BoardsMenu extends javax.swing.JFrame {
             }
         });
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DeleteBoard;
     private javax.swing.JList<String> ListBoard;

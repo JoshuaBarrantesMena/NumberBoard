@@ -10,14 +10,13 @@ package com.josh.numberboard;
  */
 public class Clients {
     private String name;
-    private int ID;
+    private String ID;
     private int winNumber;
-    private int phoneNumber;
+    private String phoneNumber;
 
-    public Clients(String name, int ID, int winNumber, int phoneNumber) {
+    public Clients(String name, String ID, String phoneNumber) {
         this.name = name;
         this.ID = ID;
-        this.winNumber = winNumber;
         this.phoneNumber = phoneNumber;
     }
 
@@ -27,7 +26,7 @@ public class Clients {
         return name;
     }
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
@@ -35,7 +34,7 @@ public class Clients {
         return winNumber;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -43,7 +42,7 @@ public class Clients {
         this.name = name;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
@@ -51,12 +50,7 @@ public class Clients {
         this.winNumber = winNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
-   //b hjahshashsau
-    
-    
-    
 }

@@ -7,21 +7,28 @@ package com.josh.numberboard;
 
 public class Numbers {
     
-    private int number;
+    private String ID;
     private int payState;
     private String payMethod;
 
-    public Numbers(int number, int payState, String payMethod) {
-        this.number = number;
+    public Numbers(int payState, String payMethod, String ID) {
         this.payState = payState;
         this.payMethod = payMethod;
+        this.ID=ID;
     }
 
     public Numbers() {
+        
     }
-
-    public int getNumber() {
-        return number;
+    
+    public void setID(String ID){
+        
+    this.ID=ID;
+    }
+    
+    public String getID(){
+    
+    return ID;
     }
 
     public int getPayState() {
@@ -32,22 +39,11 @@ public class Numbers {
         return payMethod;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
     public void setPayState(int payState) {
         this.payState = payState;
     }
 
     public void setPayMethod(String payMethod) {
         this.payMethod = payMethod;
-    }
-    
-    
-    
-    
-    
-    
-    
+    } 
 }
