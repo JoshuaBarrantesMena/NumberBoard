@@ -22,7 +22,7 @@ public class SplashScreen extends JWindow {
 
     public SplashScreen() {
         
-        ImageIcon icon = new ImageIcon("src/main/java/com/josh/resources/splash_screen.jpg");
+        ImageIcon icon = new ImageIcon("src/main/java/com/josh/resources/ChargeWallpaper.png");
         splashLabel = new JLabel(icon);
 
        
@@ -50,7 +50,7 @@ public class SplashScreen extends JWindow {
         });
 
         
-        setSize(icon.getIconWidth() / 2, icon.getIconHeight() / 2 + progressBar.getPreferredSize().height);
+        setSize(icon.getIconWidth(), icon.getIconHeight() + progressBar.getPreferredSize().height);
 
         
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
