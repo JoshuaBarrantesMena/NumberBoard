@@ -11,6 +11,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.Timer;
+
 /**
  *
  * @author Josh
@@ -18,6 +19,8 @@ import javax.swing.Timer;
 public class StartMenu extends javax.swing.JFrame {
 
     public static BoardsMenu boardWindow;
+    
+    
     /**
      * Creates new form StartMenu
      */
@@ -50,6 +53,7 @@ public class StartMenu extends javax.swing.JFrame {
         fontLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Inicio");
 
         voidPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -82,10 +86,10 @@ public class StartMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
-        SplashScreen splashScreen = new SplashScreen();
+       SplashScreen splashScreen = new SplashScreen();
     
   
-        Timer timer = new Timer(10, new ActionListener() {
+    Timer timer = new Timer(10, new ActionListener() {
         private int progress = 0;
         
         @Override
@@ -94,22 +98,31 @@ public class StartMenu extends javax.swing.JFrame {
             progress++;
             
             splashScreen.setProgress(progress);
-
+            
+           
             if (progress == 100) {
                 ((Timer) e.getSource()).stop();
-
+                
+             
                 boardWindow = new BoardsMenu();
                 boardWindow.setLocationRelativeTo(null);
                 boardWindow.setVisible(true);
-
+                
+               
                 splashScreen.dispose();
+                
                
                 dispose();
             }
         }
     });
-
+    
+    
     timer.start();
+        
+           
+        
+        
     }//GEN-LAST:event_StartActionPerformed
 
     /**

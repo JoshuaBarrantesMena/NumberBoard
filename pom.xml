@@ -11,10 +11,21 @@
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE210</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc8 -->
+<dependency>
+    <groupId>com.oracle.database.jdbc</groupId>
+    <artifactId>ojdbc8</artifactId>
+    <version>23.3.0.23.09</version>
+</dependency>
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>23.3.0.23.09</version>
+            <groupId>QR</groupId>
+            <artifactId>QR</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jcalendar</groupId>
+            <artifactId>calendar</artifactId>
+            <version>q.0.0</version>
         </dependency>
     </dependencies>
     <properties>
@@ -23,4 +34,5 @@
         <maven.compiler.target>18</maven.compiler.target>
         <exec.mainClass>com.josh.numberboard.StartMenu</exec.mainClass>
     </properties>
+    <name>fechas</name>
 </project>

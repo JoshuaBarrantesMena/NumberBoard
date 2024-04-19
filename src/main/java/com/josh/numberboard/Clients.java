@@ -4,6 +4,13 @@
  */
 package com.josh.numberboard;
 
+import ConexionSQLDB.DataBaseConnect;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Usuario
@@ -11,16 +18,18 @@ package com.josh.numberboard;
 public class Clients {
     private String name;
     private String ID;
-    private int winNumber;
     private String phoneNumber;
 
     public Clients(String name, String ID, String phoneNumber) {
         this.name = name;
         this.ID = ID;
         this.phoneNumber = phoneNumber;
+        sendDatabaseValues();
     }
 
-    public Clients() {}
+    public Clients() {
+    
+    }
 
     public String getName() {
         return name;
@@ -28,10 +37,6 @@ public class Clients {
 
     public String getID() {
         return ID;
-    }
-
-    public int getWinNumber() {
-        return winNumber;
     }
 
     public String getPhoneNumber() {
@@ -46,11 +51,44 @@ public class Clients {
         this.ID = ID;
     }
 
-    public void setWinNumber(int winNumber) {
-        this.winNumber = winNumber;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    private void sendDatabaseValues(){
+        
+        Connection cnx = DataBaseConnect.getConnection();
+        CallableStatement sendValues;
+        
+        try{
+            sendValues = cnx.prepareCall("{call CLIENT_INSERT(?, ?, ?)}");
+            sendValues.setString(1, ID);
+            sendValues.setString(2, name);
+            sendValues.setString(3, phoneNumber);
+            
+            sendValues.executeQuery();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Boards.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("No Client Insert");
+        }
+        
+    }
+    
+    public void deleteClientDatabase(){
+        
+        Connection cnx = DataBaseConnect.getConnection();
+        CallableStatement sendValues;
+        
+        try{
+            sendValues = cnx.prepareCall("{call CLIENT_DELETE(?)}");
+            sendValues.setString(1, ID);
+            
+            sendValues.executeQuery();
+            
+        }catch (SQLException ex) {
+            Logger.getLogger(Boards.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("No Client Delete");
+        }
+        
     }
 }

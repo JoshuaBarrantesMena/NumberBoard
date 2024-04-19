@@ -5,7 +5,9 @@
 package com.josh.numberboard;
 
 import ConexionSQLDB.DataBaseConnect;
+import static com.josh.numberboard.Boards.displayQRImage;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,11 +26,14 @@ import javax.swing.JOptionPane;
  */
 public class BoardsMenu extends javax.swing.JFrame {
 
-public static   DefaultListModel listModel=new DefaultListModel();
-public static ArrayList<Clients>clientsList=new ArrayList<>();
-public static  ArrayList<Boards> boardsList = new ArrayList<>();
     
-public static BoardTickets view;
+ public static   DefaultListModel listModel=new DefaultListModel();
+     public static ArrayList<Clients>clientsList=new ArrayList<>();
+  public static  ArrayList<Boards> boardsList= new ArrayList<>();
+  
+  public static BoardTickets view; //edit
+
+    
     /**
      * Creates new form BoardsMenu
      */
@@ -38,7 +43,8 @@ public static BoardTickets view;
         ListBoard.setModel(listModel);
         setImageLabel(fontLabel, "src/main/java/com/josh/resources/Skywallpaper.png");
 
-        // DATABASE
+        //
+        
         try(Connection conn = DataBaseConnect.getConnection()){
                 CallableStatement sv = conn.prepareCall("{call BOARD_GET(?)}");
                 sv.registerOutParameter(1, Types.REF_CURSOR);
@@ -53,13 +59,15 @@ public static BoardTickets view;
                     auxBoard.setName(rs.getString("NAME"));
                     auxBoard.setOwner(rs.getString("OWNER"));
                     auxBoard.setNumAmount(rs.getInt("NUM_AMOUNT"));
-                    auxBoard.setWinAmount(rs.getInt("WIN_AMOUNT"));
+                    auxBoard.setWinAmount(1);
                     auxBoard.setNumPrice(rs.getInt("NUM_PRICE"));
                     auxBoard.setPrize(rs.getString("PRIZE"));
                     auxBoard.setBoardDesc(rs.getString("BOARD_DESC"));
+                    auxBoard.setLimitDate(rs.getString("LIMIT_DATE"));
                     
-                    String date = rs.getString("LIMIT_DATE");                      
-                    auxBoard.setLimitDate("20" + date.substring(2, date.length()));
+                    String data = "Nombre: " + auxBoard.getName() + "\nFecha Límite: " + auxBoard.getLimitDate() + "\nPremio: " + auxBoard.getPrize();
+                    BufferedImage qrImage = Boards.generateQR(data);
+                    auxBoard.setQrImage(qrImage);
                     
                     boardsList.add(auxBoard);
                     listModel.addElement(rs.getString("NAME"));
@@ -68,14 +76,9 @@ public static BoardTickets view;
         } catch (SQLException ex){
             System.out.println(ex);
         }
-        // DATABASE
         
-        Boards talonario= new Boards(101, "Vaca","Jos",100,3,100,"Vaca","aewrqwe","123");
-        boardsList.add(talonario);
-        listModel.addElement(talonario.getName());
-        Boards talonario2= new Boards(102, "Vacaas","Jos",100,3,100,"Vaca","aewrqwe","123");
-        boardsList.add(talonario2);
-        listModel.addElement(talonario2.getName());
+        
+             
         
     }
     
@@ -113,6 +116,7 @@ public static BoardTickets view;
         fontLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Lista de Talonarios");
 
         fontPanel.setMinimumSize(new java.awt.Dimension(640, 420));
         fontPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -158,7 +162,7 @@ public static BoardTickets view;
 
         fontPanel.add(ScrollListBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 300, 340));
 
-        ShowInfo.setText("ver info");
+        ShowInfo.setText("VER QR");
         ShowInfo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ShowInfoActionPerformed(evt);
@@ -195,10 +199,11 @@ public static BoardTickets view;
     }//GEN-LAST:event_ListBoardMouseClicked
 
     private void DeleteBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBoardActionPerformed
-        String[] options = {"OK", "Cancelar"};
+       String[] options = {"OK", "Cancelar"};
         int opt = JOptionPane.showOptionDialog(null,"Esta a punto de eliminar el tablonario seleccionado\n\n¿Desea eliminarlo?", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
         
         if(opt == 0){
+            boardsList.get(ListBoard.getSelectedIndex()).deleteAllNumbers();
             boardsList.get(ListBoard.getSelectedIndex()).deleteBoardDatabase(boardsList.get(ListBoard.getSelectedIndex()).getID()); //DATABASE
             boardsList.remove(ListBoard.getSelectedIndex());
             listModel.remove(ListBoard.getSelectedIndex());
@@ -208,29 +213,40 @@ public static BoardTickets view;
     }//GEN-LAST:event_DeleteBoardActionPerformed
 
     private void ShowInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowInfoActionPerformed
-            
-        System.out.println("ID: " + boardsList.get(ListBoard.getSelectedIndex()).getID());
-        System.out.println("Nombre: " + boardsList.get(ListBoard.getSelectedIndex()).getName());
-        System.out.println("Propietario: " + boardsList.get(ListBoard.getSelectedIndex()).getOwner());
-        System.out.println("Cantidad de numeros: " + boardsList.get(ListBoard.getSelectedIndex()).getNumAmount());
-        System.out.println("Cantidad de ganadores: " + boardsList.get(ListBoard.getSelectedIndex()).getWinAmount());
-        System.out.println("Precio de cada numero: " + boardsList.get(ListBoard.getSelectedIndex()).getNumPrice());
-        System.out.println("Premio: " + boardsList.get(ListBoard.getSelectedIndex()).getPrize());
-        System.out.println("Descripcion: " + boardsList.get(ListBoard.getSelectedIndex()).getBoardDesc());
-        System.out.println("Fecha Limite: " + boardsList.get(ListBoard.getSelectedIndex()).getLimitDate());
+    int selectedIndex = ListBoard.getSelectedIndex();
+        if (selectedIndex != -1) { 
+     
+        Boards selectedBoard = boardsList.get(selectedIndex);
+
+        
+        BufferedImage qrImage = selectedBoard.getQrImage();
+
+        if (qrImage != null) { // Si se ha generado un QR válido
+            // Mostrar el QR en una nueva ventana
+            displayQRImage(qrImage,30 ,30);
+        } else {
+            // Mostrar un mensaje de error si no se ha generado un QR válido
+            JOptionPane.showMessageDialog(this, "No se ha generado un código QR para este elemento.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        // Mostrar un mensaje si no se ha seleccionado ningún elemento
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un elemento de la lista.", "Error", JOptionPane.ERROR_MESSAGE);
+    }              
+   
             
     }//GEN-LAST:event_ShowInfoActionPerformed
 
     private void OpenBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenBoardActionPerformed
   
-    view=new BoardTickets();
+     view=new BoardTickets(); // edit
      
         System.out.println( boardsList.get(ListBoard.getSelectedIndex()).getNumAmount());
-        
-        view.initRows(ListBoard.getSelectedIndex());
+       view.initRows( ListBoard.getSelectedIndex());
+
+      
         view.setVisible(true);
 
-        this.dispose();
+        this.dispose();        // TODO add your handling code here:        // TODO add your handling code here:
     }//GEN-LAST:event_OpenBoardActionPerformed
 
     /**
@@ -267,7 +283,7 @@ public static BoardTickets view;
             }
         });
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DeleteBoard;
     private javax.swing.JList<String> ListBoard;

@@ -4,188 +4,211 @@
  */
 package com.josh.numberboard;
 
+import ConexionSQLDB.DataBaseConnect;
 import static com.josh.numberboard.BoardsMenu.boardsList;
-import static com.josh.numberboard.BuyTickets.clientsList;
 import static com.josh.numberboard.BuyTickets.selectedNumsList;
 import static com.josh.numberboard.StartMenu.boardWindow;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.HashSet;
+import java.awt.image.BufferedImage;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
-
 /**
  *
  * @author Joshuar
  */
 public class BoardTickets extends javax.swing.JFrame {
-
     /**
      * Creates new form BoardTickets
      */
+    int rows;
+    int rowsIndex;
+    int Index;
     
-         int rows;
-
-            int rowsIndex;
-            int Index;
-            String aux;
-                MouseListener myMouse;
+    public static ArrayList<Clients>clientsList=new ArrayList<>();
 
     public BoardTickets( ) {
         initComponents();
         setLocationRelativeTo(null);
         
-         // ticketsButtons();
-
-         
+        try(Connection conn = DataBaseConnect.getConnection()){
+            CallableStatement sv = conn.prepareCall("{call CLIENT_GET(?)}");
+            sv.registerOutParameter(1, Types.REF_CURSOR);
+            sv.execute();
+        
+            ResultSet rs = (ResultSet) sv.getObject(1);
+            while(rs.next()){
+                
+                Clients auxClient = new Clients();
+                    
+                auxClient.setID(rs.getString("IDENTIFICATION"));
+                auxClient.setName(rs.getString("NAME"));
+                auxClient.setPhoneNumber(rs.getString("TELEPHONE"));
+            
+                clientsList.add(auxClient);
+            }
+                
+        } catch (SQLException ex){
+            System.out.println(ex);
+            System.out.println("No Client Get");
+        }
     }
-
-
-     
-
-
+    
     public void initRows(int num){
         System.out.println(num);
-   rows=  boardsList.get(num).getNumAmount();
-Index=num;
-   jLabel1.setText( boardsList.get(num).getName());
-    ticketsButtons();
+        rows = boardsList.get(num).getNumAmount();
+        Index = num;
+        jLabel1.setText( boardsList.get(num).getName());
+        ticketsButtons();
     }
     
-    
-   public JToggleButton [] ticketsButtonsArray= new JToggleButton[rows];
-          public void ticketsButtons()
-            {
-                int ticketCounter=0;
-            ticketsButtonsArray= new JToggleButton[rows];
-            
-                for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
-              
-                            ticketsButtonsArray[rowsIndex] = new JToggleButton();
-                              ticketsButtonsArray[rowsIndex].setText("Numero "+ ticketCounter);
-                    
-                               ActionTicketsButtons action= new  ActionTicketsButtons();
-                      
-                                ticketsButtonsArray[rowsIndex].addActionListener(action);
-                        ticketsPanel.add( ticketsButtonsArray[rowsIndex] );            
-                        
-                        if (boardsList.get(Index).getNumberState(rowsIndex)==0) {
-                            
-                                                ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);
-                          }
-                             if (boardsList.get(Index).getNumberState(rowsIndex)==2) {
-                                                ticketsButtonsArray[rowsIndex].setBackground(Color.RED);
+    public static void displayQRImage(BufferedImage image, int x, int y) {
 
-                             }
-                             if (boardsList.get(Index).getNumberState(rowsIndex)==3) {
-                                                ticketsButtonsArray[rowsIndex].setBackground(Color.YELLOW);
-                                                
-                  
-                                 }
-                             ticketCounter++;
+        if (image != null) {
+            JFrame frame = new JFrame("Código QR");
+            frame.setLocationRelativeTo(null);
+            frame.getContentPane().add(new JPanel() {
+                
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.drawImage(image, null, x, y); // Utiliza las coordenadas x e y especificadas, joshua culon
+                }
+            });
+            frame.setSize(300, 300);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setVisible(true);
+        }
+    }
+
+    public static void displayQR2Image(BufferedImage image, int x, int y, JPanel panel) {
+        if (image != null) {
+            JLabel qrLabel = new JLabel(new ImageIcon(image)); // Crea un JLabel con la imagen del código QR
+            qrLabel.setBounds(x, y, image.getWidth(), image.getHeight()); // Establece la posición y el tamaño del JLabel
+            panel.removeAll(); // Elimina cualquier componente existente en el panel
+            panel.add(qrLabel); // Agrega el JLabel al panel
+            panel.revalidate(); // Vuelve a validar el panel para refrescarlo
+            panel.repaint(); // Vuelve a pintar el panel para mostrar los cambios
+        }
+    }
+    
+    public JToggleButton [] ticketsButtonsArray= new JToggleButton[rows];
+        public void ticketsButtons(){
             
+        int ticketCounter=0;
+        ticketsButtonsArray= new JToggleButton[rows];
+            
+        for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
+              
+            ticketsButtonsArray[rowsIndex] = new JToggleButton();
+            ticketsButtonsArray[rowsIndex].setText(""+ ticketCounter);
+                    
+            ActionTicketsButtons action= new  ActionTicketsButtons();
+        
+            ticketsButtonsArray[rowsIndex].addActionListener(action);
+            ticketsPanel.add( ticketsButtonsArray[rowsIndex] );            
+                        
+            if (boardsList.get(Index).getNumberState(rowsIndex)==0) {     
+            ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);
+            }
+            if (boardsList.get(Index).getNumberState(rowsIndex)==2) {
+            ticketsButtonsArray[rowsIndex].setBackground(Color.RED);
+            }
+            if (boardsList.get(Index).getNumberState(rowsIndex)==3) {
+            ticketsButtonsArray[rowsIndex].setBackground(Color.YELLOW);
+            }
+            ticketCounter++;
+            
+        }
+    }
+          
+    public boolean verifySelectedNums(int index){
+        if (!selectedNumsList.isEmpty()) {
+            for (int i = 0; i < selectedNumsList.size(); i++) {
+                if(selectedNumsList.get(i)==index){
+                    return true;
                 }
             }
-          
-          public boolean verifySelectedNums(int index){
-              if (!selectedNumsList.isEmpty()) {
-                    for (int i = 0; i < selectedNumsList.size(); i++) {
-                  if(selectedNumsList.get(i)==index){
-                      return true;
-                  }
-              }
-              }
+        }
             
-              return false;
-          }
+        return false;
+    }
          
-          public void gedClientInformation(String ID){
-              
-              for (int i = 0; i < clientsList.size(); i++) {
-                  if (clientsList.get(i).getID().equals(ID)) {
-  
-                      jLClientName.setText("Nombre: "+ clientsList.get(i).getName());
-                      jLClientID.setText("ID: "+ clientsList.get(i).getID());
-                              jLPhoneNumber.setText("Numero de telefono: "+ clientsList.get(i).getPhoneNumber());
-                  }
-                  
-              }
-          }
-         
-public class MouseOverButton implements MouseListener
-{
-        @Override
-        public void mouseClicked(MouseEvent e) {
+    public void getClientInformation(String ID,int numIndex){   
+        System.out.println(boardsList.get(Index).getNumberID(rowsIndex));
+        System.out.println(rowsIndex);
+        System.out.println(clientsList.size());
+        for (int i = 0; i < clientsList.size(); i++) {
+            System.out.println("ID: "+ID);
+            System.out.println(clientsList.get(i).getID());
+            if (clientsList.get(i).getID().equals(ID)) {
+                
+                System.out.println(clientsList.get(i).getName());
+                System.out.println(clientsList.get(i).getID());
+                System.out.println(clientsList.get(i).getPhoneNumber());
+                jLClientName.setText("Nombre: "+ clientsList.get(i).getName());
+                jLClientID.setText("ID: "+ clientsList.get(i).getID());
+                jLPhoneNumber.setText("Numero de telefono: "+ clientsList.get(i).getPhoneNumber());
+                jLPayMethod.setText("Forma de paga: "+boardsList.get(Index).getNumberPayMethod(numIndex));
+                jLBuyDate.setText("Fecha de compra: "+boardsList.get(Index).geNLimitDate(numIndex));
+               
+                BufferedImage jhashua =boardsList.get(Index).getNQrImage(numIndex);
+                displayQR2Image(jhashua,0,0 ,qrPanel );
+                System.out.println("la imagem se mostro");
+                break;    
+            }
         }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            gedClientInformation(aux);
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
-    
-}
+    }
          
 
-     public class ActionTicketsButtons implements ActionListener
-       {
+
+    public class ActionTicketsButtons implements ActionListener{
+        
         @Override
         public void actionPerformed(ActionEvent ae) {
-                                           MouseOverButton pepito=new MouseOverButton();
-
-              
-                for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) 
-                {
-              
-                               if (  ticketsButtonsArray[rowsIndex].getBackground()!=Color.GREEN) {
-                                   
-                                   aux=boardsList.get(Index).getNumID(rowsIndex);
-                            ticketsButtonsArray[rowsIndex].addMouseListener(pepito);
+            
+            for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
                     
-                    }
-                           
-                    if (ae.getSource().equals(ticketsButtonsArray[rowsIndex])&&ticketsButtonsArray[rowsIndex].getBackground()==
-                            Color.RED&&!verifySelectedNums(rowsIndex)) {
-                        selectedNumsList.add(rowsIndex);
+                if (ae.getSource().equals(ticketsButtonsArray[rowsIndex])&&ticketsButtonsArray[rowsIndex].getBackground() == Color.RED&&!verifySelectedNums(rowsIndex)) {
+                    selectedNumsList.add(rowsIndex);
+                }
+                if (ae.getSource().equals(ticketsButtonsArray[rowsIndex])&&ticketsButtonsArray[rowsIndex].getBackground() == 
+                    Color.RED||ticketsButtonsArray[rowsIndex].getBackground() ==  Color.YELLOW&&ticketsButtonsArray[rowsIndex].isSelected()) {                            
                         
+                    getClientInformation(boardsList.get(Index).getNumberID(rowsIndex),rowsIndex);
+                    ticketsButtonsArray[rowsIndex].setSelected(false);
+                break;
+                }
+                if(ae.getSource().equals(ticketsButtonsArray[rowsIndex])&&ticketsButtonsArray[rowsIndex].getBackground()!=Color.YELLOW&&
+                    ticketsButtonsArray[rowsIndex].getBackground()!=Color.RED) {
+                        
+                    if(ticketsButtonsArray[rowsIndex].isSelected() && ticketsButtonsArray[rowsIndex].getBackground()==Color.GREEN){
+                        System.out.println(Index);
+                        boardsList.get(Index).setNumbersState(rowsIndex,1);       // 1 para numeros seleccionados     
+                        ticketsButtonsArray[rowsIndex].setBackground(Color.LIGHT_GRAY);
+                    }else{
+                            boardsList.get(Index).setNumbersState(rowsIndex,0);    // 0 para numeros disponibles
+                            ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);                                                   
                     }
-           
-                       
-                        if(ae.getSource().equals(ticketsButtonsArray[rowsIndex])&&ticketsButtonsArray[rowsIndex].getBackground()!=Color.YELLOW&&
-                              ticketsButtonsArray[rowsIndex].getBackground()!=Color.RED)
-                        {
-                                  if(ticketsButtonsArray[rowsIndex].isSelected() && ticketsButtonsArray[rowsIndex].getBackground()==Color.GREEN)
-                                  {
-                            System.out.println(Index);
-                            boardsList.get(Index).setNumbersState(rowsIndex,1);       // 1 para numeros seleccionados     
-                           ticketsButtonsArray[rowsIndex].setBackground(Color.LIGHT_GRAY);
-                                  }
-                                  
-                                  else
-                                  {
-                                                      boardsList.get(Index).setNumbersState(rowsIndex,0);    // 0 para numeros disponibles
-                                                       ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);                                                   
-                                  }
-                        }
-                
-                 }
+                }
+            }
         }
-  }
+    }
      
 public void setEnabledButtons(int index){
     
@@ -238,9 +261,12 @@ public void setEnabledButtons(int index){
         jLabel11 = new javax.swing.JLabel();
         jLPhoneNumber = new javax.swing.JLabel();
         jLPayMethod = new javax.swing.JLabel();
+        qrPanel = new javax.swing.JPanel();
         jLBuyDate = new javax.swing.JLabel();
+        genWin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Numeros del Talonario");
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -325,6 +351,12 @@ public void setEnabledButtons(int index){
 
         jLabel7.setText("al");
 
+        jTFTo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFToActionPerformed(evt);
+            }
+        });
+
         jButton3.setText("Seleccionar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -350,6 +382,17 @@ public void setEnabledButtons(int index){
 
         jLPayMethod.setText("Forma de pago:");
 
+        javax.swing.GroupLayout qrPanelLayout = new javax.swing.GroupLayout(qrPanel);
+        qrPanel.setLayout(qrPanelLayout);
+        qrPanelLayout.setHorizontalGroup(
+            qrPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        qrPanelLayout.setVerticalGroup(
+            qrPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 212, Short.MAX_VALUE)
+        );
+
         jLBuyDate.setText("Fecha de compra: ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -364,14 +407,21 @@ public void setEnabledButtons(int index){
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLClientName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addGap(113, 113, 113))
+                                .addComponent(jLClientName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(175, 175, 175))
                             .addComponent(jLClientID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLPhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLBuyDate)
-                            .addComponent(jLPayMethod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(qrPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLPayMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLBuyDate))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel11)))
+                                .addGap(113, 113, 113)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -379,20 +429,29 @@ public void setEnabledButtons(int index){
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLClientName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLClientName, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLClientID)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLPhoneNumber)
+                .addGap(12, 12, 12)
+                .addComponent(jLPayMethod)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLBuyDate)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLPayMethod)
                 .addGap(18, 18, 18)
-                .addComponent(jLBuyDate)
-                .addContainerGap(198, Short.MAX_VALUE))
+                .addComponent(qrPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
+
+        genWin.setText("GENERAR GANADOR");
+        genWin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                genWinActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -418,27 +477,29 @@ public void setEnabledButtons(int index){
                         .addGap(18, 18, 18)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
+                        .addGap(80, 80, 80)
                         .addComponent(jTBRandomNum)
-                        .addGap(26, 26, 26)
+                        .addGap(30, 30, 30)
                         .addComponent(jLRandomNum, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(135, 135, 135)
-                        .addComponent(jLabel1)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel5)
                                 .addGap(191, 191, 191))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(81, 81, 81)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1)
+                                .addGap(99, 99, 99)
+                                .addComponent(genWin)
+                                .addGap(64, 64, 64)
                                 .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTFFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTFFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel7)
-                                .addGap(31, 31, 31)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jTFTo, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
+                                .addGap(38, 38, 38)
                                 .addComponent(jButton3)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
@@ -452,24 +513,27 @@ public void setEnabledButtons(int index){
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTFTo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jTFFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel7)
-                                        .addComponent(jButton3))))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(5, 5, 5)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jTBRandomNum, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLRandomNum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(jLRandomNum, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(genWin)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jButton3)
+                                    .addComponent(jTFTo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTFFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jTBRandomNum, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
@@ -526,9 +590,7 @@ ticketsButtonsArray[i].setBackground(Color.GREEN);
 
        boolean isNumSelected=false;
        boolean reserveNums=false;
-   
 
-            
                 for (rowsIndex = 0; rowsIndex  < rows; rowsIndex ++) {
           
                 if (boardsList.get(Index). getNumberState(rowsIndex)==2&& !selectedNumsList.isEmpty()){
@@ -571,8 +633,8 @@ ticketsButtonsArray[i].setBackground(Color.GREEN);
         boolean notAvailable=false;
         
            String[] options = {"OK", "Cancelar"};
-        
-        if (from<=to) {
+       
+        if (from<=to ) {
               for (int i = from; i <= to; i++) {
             if (ticketsButtonsArray[i].getBackground()!=Color.GREEN) {
        notAvailable=true;
@@ -630,6 +692,27 @@ generateRandomNum();
 
     }//GEN-LAST:event_jTBRandomNumActionPerformed
 
+    private void genWinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genWinActionPerformed
+int numberNums = 100;
+    JFrame frame = new JFrame("Winner Animation");
+    frame.setName("Ganador del Talonario");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   
+    frame.setSize(400, 400);
+    WinnerAnimation animationPanel = new WinnerAnimation();
+    frame.setLocationRelativeTo(null);
+// Aquí se crea una instancia de la clase WinnerAnimation
+    frame.getContentPane().add(animationPanel, BorderLayout.CENTER);
+    frame.setVisible(true);
+
+    // Iniciar el temporizador de cuenta regresiva
+    animationPanel.startCountdown(numberNums);         // TODO add your handling code here:
+    }//GEN-LAST:event_genWinActionPerformed
+
+    private void jTFToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFToActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFToActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -666,6 +749,7 @@ generateRandomNum();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton genWin;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -692,6 +776,7 @@ generateRandomNum();
     private javax.swing.JToggleButton jTBRandomNum;
     private javax.swing.JTextField jTFFrom;
     private javax.swing.JTextField jTFTo;
+    private javax.swing.JPanel qrPanel;
     private javax.swing.JPanel ticketsPanel;
     // End of variables declaration//GEN-END:variables
 }

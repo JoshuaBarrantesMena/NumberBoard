@@ -5,227 +5,225 @@
 package com.josh.numberboard;
 
 import static com.josh.numberboard.BoardsMenu.boardsList;
+import static com.josh.numberboard.BoardTickets.clientsList;
 import static com.josh.numberboard.BoardsMenu.view;
+import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-
 /**
  *
  * @author Joshuar
  */
 public class BuyTickets extends javax.swing.JFrame {
-
     /**
      * Creates new form BuyTickets
      */
-    
-    
     public static int listIndex;
     int clientListIndex;
     int numAmount;
     int selectedNums=0;
-        boolean areReserveNums;
-      String clientName;
-     String clientPhoneNumber;
-     String clientID;
-     String payMethod;
+    boolean areReserveNums;
+    String clientName;
+    String clientPhoneNumber;
+    String clientID;
+    String payMethod;
      
- public static  ArrayList<Integer> selectedNumsList=new ArrayList<>();
- public static ArrayList<Clients>clientsList=new ArrayList<>();
- private    DefaultListModel listModel=new DefaultListModel();
+    public static ArrayList<Integer> selectedNumsList=new ArrayList<>();
+    private DefaultListModel listModel=new DefaultListModel();
  
-     public void getListIndex(int num, boolean reserveNums){
-    numAmount= boardsList.get(num).getNumAmount();
-      listIndex=num;
-      jLBoardName.setText("Talonario: "+boardsList.get(listIndex).getName());
-       listModel = new DefaultListModel();
+    public void getListIndex(int num, boolean reserveNums){
+        numAmount= boardsList.get(num).getNumAmount();
+        listIndex=num;
+        jLBoardName.setText("Talonario: "+boardsList.get(listIndex).getName());
+        listModel = new DefaultListModel();
         jLiNumbersSelected.setModel(listModel);
         areReserveNums=reserveNums;
         
-         if (reserveNums) {
-             for (int i = 0; i < selectedNumsList.size(); i++) {
-                 selectedNums++;
-                 listModel.addElement("Numero: "+selectedNumsList.get(i));
-             }
-                jTFTotalAmount.setText(""+ selectedNums*boardsList.get(listIndex).getNumPrice());
-         }
-         else{
-        
-        for (int i = 0; i < numAmount; i++) {
-           
-            if ( boardsList.get(listIndex).getNumberState(i)==1) {
+        if (reserveNums) {
+            for (int i = 0; i < selectedNumsList.size(); i++) {
                 selectedNums++;
-                     listModel.addElement("Numero: "+ i);        
-                     selectedNumsList.add(i);
+                listModel.addElement("Numero: "+selectedNumsList.get(i));
             }
-        }
-               jTFTotalAmount.setText(""+ selectedNums*boardsList.get(listIndex).getNumPrice());
-
+            jTFTotalAmount.setText(""+ selectedNums*boardsList.get(listIndex).getNumPrice());
+            
+         }else{
+            for (int i = 0; i < numAmount; i++) {
+                if ( boardsList.get(listIndex).getNumberState(i)==1) {
+                    selectedNums++;
+                    listModel.addElement("Numero: "+ i);        
+                    selectedNumsList.add(i);
+                }
+            }
+            
+            jTFTotalAmount.setText(""+ selectedNums*boardsList.get(listIndex).getNumPrice());
          }    
     }
 
     public BuyTickets() {
         initComponents();
-         
+        
     }
     
 
 
-public void createClient(){
-    clientName= jTFClientName.getText();
-    clientPhoneNumber= jTFClientPhone.getText();
-    clientID= jTFClientID.getText();
+    public void createClient(){
+        clientName= jTFClientName.getText();
+        clientPhoneNumber= jTFClientPhone.getText();
+        clientID= jTFClientID.getText();
    
-     
-    Clients newClient= new Clients(clientName,clientID,clientPhoneNumber);
+        Clients newClient= new Clients(clientName,clientID,clientPhoneNumber);
+        clientsList.add(newClient);
     
-    clientsList.add(newClient);
-    
-}
+    }
 
-public void setVisibleFields(){
+    public void setVisibleFields(){
 
         if (areReserveNums) {
             System.out.println("linea 90");
-        verifyReserveNumID();
-    }
-  else  if (verifyID()==true) {
-        System.out.println("asdfa");
-          jLClientName.setVisible(true);   
-        jTFClientName.setVisible(true);
+            verifyReserveNumID();
+        }else if (verifyID()==true) {
+            
+            System.out.println("asdfa");
+            jLClientName.setVisible(true);   
+            jTFClientName.setVisible(true);
     
-        jLClientPhone.setVisible(true);
-        jTFClientPhone.setVisible(true);
+            jLClientPhone.setVisible(true);
+            jTFClientPhone.setVisible(true);
     
-        jLPayMethod.setVisible(true);
-        jCBPayMethod.setVisible(true);
+            jLPayMethod.setVisible(true);
+            jCBPayMethod.setVisible(true);
+            jLTotalAmount.setVisible(true);
+            jTFTotalAmount.setVisible(true);
             jTFClientName.setText(clientsList.get(clientListIndex).getName());
-          jTFClientPhone.setText(clientsList.get(clientListIndex).getPhoneNumber());
+            jTFClientPhone.setText(clientsList.get(clientListIndex).getPhoneNumber());
+            
+        }else{
+            String[] options = {"OK", "Cancelar"};
+            int opt = JOptionPane.showOptionDialog(null,"No se encontro el ID ingresado\n\n¿Desea registrar un cliente nuevo?", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
+        
+            if(opt == 0){
+
+                jLClientName.setVisible(true);   
+                jTFClientName.setVisible(true);
+    
+                jLClientPhone.setVisible(true);
+                jTFClientPhone.setVisible(true);
+    
+                jLPayMethod.setVisible(true);
+                jCBPayMethod.setVisible(true);
+                jLTotalAmount.setVisible(true);
+                jTFTotalAmount.setVisible(true);
+            }
+        }
+    }
+    
+    public void verifyReserveNumID(){
+    
+        boolean aux=true;
+        for (int i = 0; i < selectedNumsList.size(); i++) {
+            System.out.println("Linea 131");
+            System.out.println( jTFClientID.getText());
+            if (!boardsList.get(listIndex).getNumID(selectedNumsList.get(i)).equals(jTFClientID.getText())) {//verifica si todos los numeros tienen mismo ID
+                System.out.println("Linea 133");
+                aux=false;
+                break;
+            }
+        }
+        
+        if (aux) {
+            areReserveNums=false;
+            setVisibleFields();
+         }else{
+            String[] options = {"OK", "Cancelar"};
+            JOptionPane.showOptionDialog(null,"El ID ingresado no coincide con el de los numeros reservados\n\n¿Desea ingresar un ID diferente?", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
             
         }
-    
-    else{
-        String[] options = {"OK", "Cancelar"};
-        int opt = JOptionPane.showOptionDialog(null,"No se encontro el ID ingresado\n\n¿Desea registrar un cliente nuevo?", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
-        
-        if(opt == 0){
-
-        jLClientName.setVisible(true);   
-        jTFClientName.setVisible(true);
-    
-        jLClientPhone.setVisible(true);
-        jTFClientPhone.setVisible(true);
-    
-        jLPayMethod.setVisible(true);
-        jCBPayMethod.setVisible(true);
-        }
     }
-    
 
-}
-public void verifyReserveNumID(){
-    
-    boolean aux=true;
-             for (int i = 0; i < selectedNumsList.size(); i++) {
-                 System.out.println("Linea 131");
-                 System.out.println( jTFClientID.getText());
-                if (!boardsList.get(listIndex).getNumID(selectedNumsList.get(i)).equals(jTFClientID.getText())) {//verifica si todos los numeros tienen mismo ID
-                    System.out.println("Linea 133");
-                     aux=false;
-                             break;
-                }
-         }
-          if (aux) {
-                            areReserveNums=false;
-              setVisibleFields();
-              
-         }
-          else{
+    public boolean verifyID(){
 
-                   String[] options = {"OK", "Cancelar"};
-         int opt = JOptionPane.showOptionDialog(null,"El ID ingresado no coincide con el de los numeros reservados\n\n¿Desea ingresar un ID diferente?", "¡AVISO!", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null , options, null);
-        
-              if (opt==1) {
+        if (!clientsList.isEmpty()) {
 
-              }
-
-          }
-}
-
-public   boolean verifyID(){
-
-
-   if (!clientsList.isEmpty()) {
-
-        for (int i = 0; i < clientsList.size(); i++) {
+            for (int i = 0; i < clientsList.size(); i++) {
                    
-        if (clientsList.get(i).getID().equals(jTFClientID.getText())) {
-            System.out.println("Cliente encontrado");
-            clientListIndex=i;
-           return true;
-        }
-      }
-    }
-
-    return false;
-}
-
-public void payNumbers(){ // 3 = pagado
-    
-        payMethod=jCBPayMethod.getSelectedItem().toString();
-        if (!verifyID()) {
-                createClient();
-    }
-
-    for (int i = 0; i < selectedNums; i++) {
-        
-        boardsList.get(listIndex).setNumbersState(selectedNumsList.get(i),3);
-        boardsList.get(listIndex).setNumberID(selectedNumsList.get(i),clientID);
-        
-      //  view.setEnabledButtons(selectedNumsList.get(i));
-        view.changeStateButton(selectedNumsList.get(i), 3); //edit
-    }
-    
-        selectedNumsList.clear();
-
-            this.dispose();
-}
-
-public void reserveNumbers(){ // 1 = reservado
-    
-                if (!verifyID()) {
-                    createClient();
+                if (clientsList.get(i).getID().equals(jTFClientID.getText())) {
+                    System.out.println("Cliente encontrado");
+                    clientListIndex=i;
+                    return true;
                 }
-    for (int i = 0; i < selectedNums; i++) {
-        
-        boardsList.get(listIndex).setNumbersState(selectedNumsList.get(i),2);
-        view.changeStateButton(selectedNumsList.get(i), 2); // edit
-                boardsList.get(listIndex).setNumberID(selectedNumsList.get(i),jTFClientID.getText());
+            }
+        }
 
-        System.out.println("ID asignado: "+boardsList.get(listIndex).getNumID(selectedNumsList.get(i)));
+        return false;
     }
-    selectedNumsList.clear();
-            this.dispose();
-}
 
-public void resetNumbers(){
-  
-  
-  
-  
-  
+
+
+    public void payNumbers(){ // 3 = pagado
+        java.util.Date fechaSeleccionada = jDateChooser1.getDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        String fechaString = sdf.format(fechaSeleccionada);
+        clientID=jTFClientID.getText();
+        payMethod=jCBPayMethod.getSelectedItem().toString();
     
-    for (int i = 0; i < selectedNums; i++) {
-        
-        boardsList.get(listIndex).setNumbersState(selectedNumsList.get(i),0);
-        view.changeStateButton(selectedNumsList.get(i), 0); // edit
-    }
-        selectedNumsList.clear();
+        if (!verifyID()) {
+            createClient();
+        }
 
-            this.dispose();
-}
+        for (int i = 0; i < selectedNums; i++) {
+            Boards auxBoard = boardsList.get(listIndex);
+            auxBoard.setNumbersState(selectedNumsList.get(i),3);
+            auxBoard.setNumberID(selectedNumsList.get(i),jTFClientID.getText());
+            auxBoard.setNumberPayMethod(selectedNumsList.get(i),payMethod);
+            auxBoard.setDateNum(selectedNumsList.get(i), fechaString);
+            boardsList.set(listIndex, auxBoard);
+            boardsList.get(listIndex).sendDatabaseValues(selectedNumsList.get(i));
+        
+            String data = "Numero: " + selectedNumsList.get(i) + "\nClientID: " + clientID + "\nFecha de Compra: " + fechaString + "\nMetodo de Pago: " + payMethod;
+            BufferedImage qrNumber =boardsList.get(listIndex).generateNumQrImage(selectedNumsList.get(i), data);
+            boardsList.get(listIndex).setImageQR(selectedNumsList.get(i), qrNumber);
+            view.changeStateButton(selectedNumsList.get(i), 3); //edit
+    
+        }
+        
+        selectedNumsList.clear();
+        this.dispose();        
+    }
+
+    public void reserveNumbers(){ // 1 = reservado
+    
+        if (!verifyID()) {
+            createClient();
+        }
+        
+        for (int i = 0; i < selectedNums; i++) {
+        
+            Boards auxBoard = boardsList.get(listIndex);
+            auxBoard.setNumbersState(selectedNumsList.get(i),2);
+            view.changeStateButton(selectedNumsList.get(i), 2); // edit
+            auxBoard.setNumberID(selectedNumsList.get(i),jTFClientID.getText());
+            boardsList.set(listIndex, auxBoard);
+            boardsList.get(listIndex).sendDatabaseValues(selectedNumsList.get(i));
+
+            System.out.println("ID asignado: "+boardsList.get(listIndex).getNumID(selectedNumsList.get(i)));
+        }
+        selectedNumsList.clear();
+        this.dispose();
+    }
+
+    public void resetNumbers(){
+
+        for (int i = 0; i < selectedNums; i++) {
+        
+            boardsList.get(listIndex).setNumbersState(selectedNumsList.get(i),0);
+            view.changeStateButton(selectedNumsList.get(i), 0); // edit
+        }
+        selectedNumsList.clear();
+        this.dispose();
+    }
 
         public void addElementList(String newValue){
         listModel.addElement(newValue);
@@ -259,14 +257,16 @@ public void resetNumbers(){
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jBReservation = new javax.swing.JButton();
-        jCBIDList = new javax.swing.JComboBox<>();
         jBClientRegistration = new javax.swing.JButton();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLPayMethod1 = new javax.swing.JLabel();
 
         jLabel3.setText("jLabel3");
 
         jToggleButton1.setText("jToggleButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Comprar o Reservar Numeros");
 
         jLBoardName.setText("Talonario: XXXXXX");
 
@@ -287,6 +287,7 @@ public void resetNumbers(){
             }
         });
 
+        jCBPayMethod.setVisible(false);
         jCBPayMethod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Efectivo", "Sinpe", "Tarjeta" }));
         jCBPayMethod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -307,10 +308,13 @@ public void resetNumbers(){
 
         jTFClientPhone.setVisible(false);
 
+        jLPayMethod.setVisible(false);
         jLPayMethod.setText("Metodo de pago:");
 
+        jLTotalAmount.setVisible(false);
         jLTotalAmount.setText("Total a pagar:");
 
+        jTFTotalAmount.setVisible(false);
         jTFTotalAmount.setEnabled(false);
         jTFTotalAmount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -336,13 +340,6 @@ public void resetNumbers(){
             }
         });
 
-        jCBIDList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jCBIDList.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCBIDListActionPerformed(evt);
-            }
-        });
-
         jBClientRegistration.setText("Deplegar datos");
         jBClientRegistration.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -350,53 +347,58 @@ public void resetNumbers(){
             }
         });
 
+        jLPayMethod.setVisible(false);
+        jLPayMethod1.setText("Fecha de Pago");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLClientName, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLClientID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLClientPhone, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(73, 73, 73)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTFClientID, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(151, 151, 151)
+                                .addComponent(jBPay)
+                                .addGap(12, 12, 12)
+                                .addComponent(jBReservation)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jBClientRegistration))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTFClientName, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jCBIDList, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTFClientPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(151, 151, 151)
-                            .addComponent(jBPay)
-                            .addGap(12, 12, 12)
-                            .addComponent(jBReservation)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jButton1))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLTotalAmount)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTFTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButton1))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(230, 230, 230)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLBoardName)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jLPayMethod)
-                            .addGap(30, 30, 30)
-                            .addComponent(jCBPayMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(140, 140, 140))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLClientName, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLClientID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLClientPhone, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGap(73, 73, 73)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jTFClientID, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jBClientRegistration))
+                                    .addComponent(jTFClientName, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTFClientPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(jLTotalAmount)
+                                .addGap(26, 26, 26)
+                                .addComponent(jTFTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLPayMethod)
+                        .addGap(18, 18, 18)
+                        .addComponent(jCBPayMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(jLPayMethod1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -415,11 +417,10 @@ public void resetNumbers(){
                             .addComponent(jLClientID)
                             .addComponent(jTFClientID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBClientRegistration))
-                        .addGap(20, 20, 20)
+                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTFClientName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLClientName)
-                            .addComponent(jCBIDList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLClientName)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLBoardName)))
@@ -431,14 +432,17 @@ public void resetNumbers(){
                             .addComponent(jLClientPhone))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLPayMethod)
-                            .addComponent(jCBPayMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLPayMethod)
+                                .addComponent(jCBPayMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLPayMethod1)))
+                        .addGap(54, 54, 54)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLTotalAmount)
                             .addComponent(jTFTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -467,13 +471,10 @@ public void resetNumbers(){
         // TODO add your handling code here:
     }//GEN-LAST:event_jTFClientIDActionPerformed
 
-    private void jCBIDListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBIDListActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCBIDListActionPerformed
-
     private void jBClientRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBClientRegistrationActionPerformed
         // TODO add your handling code here:
-setVisibleFields();        
+        System.out.println(""+jCBPayMethod.getSelectedItem().toString());   
+        setVisibleFields();        
     }//GEN-LAST:event_jBClientRegistrationActionPerformed
 
     private void jTFTotalAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFTotalAmountActionPerformed
@@ -536,13 +537,14 @@ setVisibleFields();
     private javax.swing.JButton jBPay;
     private javax.swing.JButton jBReservation;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jCBIDList;
     private javax.swing.JComboBox<String> jCBPayMethod;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLBoardName;
     private javax.swing.JLabel jLClientID;
     private javax.swing.JLabel jLClientName;
     private javax.swing.JLabel jLClientPhone;
     private javax.swing.JLabel jLPayMethod;
+    private javax.swing.JLabel jLPayMethod1;
     private javax.swing.JLabel jLTotalAmount;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
