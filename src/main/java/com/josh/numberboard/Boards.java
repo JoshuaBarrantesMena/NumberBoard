@@ -90,8 +90,8 @@ public class Boards {
     
     private void sendDatabaseValues(){
         Connection cnx = DataBaseConnect.getConnection();
-        CallableStatement sendValues; //llamar procedimientos
-        Statement maxID; //llamar comandos directos
+        CallableStatement sendValues; 
+        Statement maxID; 
         ResultSet result;
         try {
             
@@ -116,7 +116,7 @@ public class Boards {
             sendValues.setString(8, limitDate);
             sendValues.setInt(9, ID);
             
-            sendValues.executeQuery(); //ejecutar el comando deseado
+            sendValues.executeQuery(); 
              
         } catch (SQLException ex) {
             Logger.getLogger(Boards.class.getName()).log(Level.SEVERE, null, ex);
@@ -370,7 +370,7 @@ public static BufferedImage generateQR(String data) {
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     Graphics2D g2 = (Graphics2D) g;
-                    g2.drawImage(image, null, x, y); // Utiliza las coordenadas x e y especificadas, joshua culon
+                    g2.drawImage(image, null, x, y); 
                 }
             });
             frame.setSize(276, 300);

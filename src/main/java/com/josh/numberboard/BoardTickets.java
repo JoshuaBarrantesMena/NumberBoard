@@ -64,12 +64,10 @@ public class BoardTickets extends javax.swing.JFrame {
                 
         } catch (SQLException ex){
             System.out.println(ex);
-            System.out.println("No Client Get");
         }
     }
     
     public void initRows(int num){
-        System.out.println(num);
         rows = boardsList.get(num).getNumAmount();
         Index = num;
         jLabel1.setText( boardsList.get(num).getName());
@@ -87,7 +85,7 @@ public class BoardTickets extends javax.swing.JFrame {
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     Graphics2D g2 = (Graphics2D) g;
-                    g2.drawImage(image, null, x, y); // Utiliza las coordenadas x e y especificadas, joshua culon
+                    g2.drawImage(image, null, x, y); 
                 }
             });
             frame.setSize(300, 300);
@@ -98,12 +96,12 @@ public class BoardTickets extends javax.swing.JFrame {
 
     public static void displayQR2Image(BufferedImage image, int x, int y, JPanel panel) {
         if (image != null) {
-            JLabel qrLabel = new JLabel(new ImageIcon(image)); // Crea un JLabel con la imagen del código QR
-            qrLabel.setBounds(x, y, image.getWidth(), image.getHeight()); // Establece la posición y el tamaño del JLabel
-            panel.removeAll(); // Elimina cualquier componente existente en el panel
-            panel.add(qrLabel); // Agrega el JLabel al panel
-            panel.revalidate(); // Vuelve a validar el panel para refrescarlo
-            panel.repaint(); // Vuelve a pintar el panel para mostrar los cambios
+            JLabel qrLabel = new JLabel(new ImageIcon(image)); 
+            qrLabel.setBounds(x, y, image.getWidth(), image.getHeight()); 
+            panel.removeAll(); 
+            panel.add(qrLabel); 
+            panel.revalidate(); 
+            panel.repaint(); 
         }
     }
     
@@ -150,17 +148,11 @@ public class BoardTickets extends javax.swing.JFrame {
     }
          
     public void getClientInformation(String ID,int numIndex){   
-        System.out.println(boardsList.get(Index).getNumberID(rowsIndex));
-        System.out.println(rowsIndex);
-        System.out.println(clientsList.size());
+ 
         for (int i = 0; i < clientsList.size(); i++) {
-            System.out.println("ID: "+ID);
-            System.out.println(clientsList.get(i).getID());
+       
             if (clientsList.get(i).getID().equals(ID)) {
-                
-                System.out.println(clientsList.get(i).getName());
-                System.out.println(clientsList.get(i).getID());
-                System.out.println(clientsList.get(i).getPhoneNumber());
+        
                 jLClientName.setText("Nombre: "+ clientsList.get(i).getName());
                 jLClientID.setText("ID: "+ clientsList.get(i).getID());
                 jLPhoneNumber.setText("Numero de telefono: "+ clientsList.get(i).getPhoneNumber());
@@ -169,7 +161,6 @@ public class BoardTickets extends javax.swing.JFrame {
                
                 BufferedImage jhashua =boardsList.get(Index).getNQrImage(numIndex);
                 displayQR2Image(jhashua,0,0 ,qrPanel );
-                System.out.println("la imagem se mostro");
                 break;    
             }
         }
@@ -198,11 +189,10 @@ public class BoardTickets extends javax.swing.JFrame {
                     ticketsButtonsArray[rowsIndex].getBackground()!=Color.RED) {
                         
                     if(ticketsButtonsArray[rowsIndex].isSelected() && ticketsButtonsArray[rowsIndex].getBackground()==Color.GREEN){
-                        System.out.println(Index);
-                        boardsList.get(Index).setNumbersState(rowsIndex,1);       // 1 para numeros seleccionados     
+                        boardsList.get(Index).setNumbersState(rowsIndex,1);       
                         ticketsButtonsArray[rowsIndex].setBackground(Color.LIGHT_GRAY);
                     }else{
-                            boardsList.get(Index).setNumbersState(rowsIndex,0);    // 0 para numeros disponibles
+                            boardsList.get(Index).setNumbersState(rowsIndex,0);    
                             ticketsButtonsArray[rowsIndex].setBackground(Color.GREEN);                                                   
                     }
                 }
@@ -215,7 +205,7 @@ public void setEnabledButtons(int index){
     ticketsButtonsArray[index].setEnabled(false);
 }
        
-       public void changeStateButton(int posButton, int state){ // edit
+       public void changeStateButton(int posButton, int state){ 
            if(state == 3){
                ticketsButtonsArray[posButton].setBackground(Color.YELLOW);
            }else if(state == 2){
@@ -608,7 +598,6 @@ ticketsButtonsArray[i].setBackground(Color.GREEN);
                 }
                 
                 if (reserveNums==true) {
-                    System.out.println("reserveNums true");
                        BuyTickets newBoard = new BuyTickets();
                        newBoard.getListIndex(Index,reserveNums);
                        newBoard.setLocationRelativeTo(null);
@@ -616,7 +605,6 @@ ticketsButtonsArray[i].setBackground(Color.GREEN);
                  }
 
                 else if (isNumSelected==true) {
-                                        System.out.println("reserveNums false");
 
                        BuyTickets newBoard = new BuyTickets();
                        newBoard.getListIndex(Index,reserveNums);
@@ -696,16 +684,14 @@ generateRandomNum();
 int numberNums = 100;
     JFrame frame = new JFrame("Winner Animation");
     frame.setName("Ganador del Talonario");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
    
     frame.setSize(400, 400);
     WinnerAnimation animationPanel = new WinnerAnimation();
     frame.setLocationRelativeTo(null);
-// Aquí se crea una instancia de la clase WinnerAnimation
     frame.getContentPane().add(animationPanel, BorderLayout.CENTER);
     frame.setVisible(true);
 
-    // Iniciar el temporizador de cuenta regresiva
     animationPanel.startCountdown(numberNums);         // TODO add your handling code here:
     }//GEN-LAST:event_genWinActionPerformed
 

@@ -81,11 +81,9 @@ public class BuyTickets extends javax.swing.JFrame {
     public void setVisibleFields(){
 
         if (areReserveNums) {
-            System.out.println("linea 90");
             verifyReserveNumID();
         }else if (verifyID()==true) {
             
-            System.out.println("asdfa");
             jLClientName.setVisible(true);   
             jTFClientName.setVisible(true);
     
@@ -98,6 +96,8 @@ public class BuyTickets extends javax.swing.JFrame {
             jTFTotalAmount.setVisible(true);
             jTFClientName.setText(clientsList.get(clientListIndex).getName());
             jTFClientPhone.setText(clientsList.get(clientListIndex).getPhoneNumber());
+            jBPay.setEnabled(true);
+            jBReservation.setEnabled(true);
             
         }else{
             String[] options = {"OK", "Cancelar"};
@@ -115,6 +115,8 @@ public class BuyTickets extends javax.swing.JFrame {
                 jCBPayMethod.setVisible(true);
                 jLTotalAmount.setVisible(true);
                 jTFTotalAmount.setVisible(true);
+                jBPay.setEnabled(true);
+                jBReservation.setEnabled(true);
             }
         }
     }
@@ -123,10 +125,7 @@ public class BuyTickets extends javax.swing.JFrame {
     
         boolean aux=true;
         for (int i = 0; i < selectedNumsList.size(); i++) {
-            System.out.println("Linea 131");
-            System.out.println( jTFClientID.getText());
-            if (!boardsList.get(listIndex).getNumID(selectedNumsList.get(i)).equals(jTFClientID.getText())) {//verifica si todos los numeros tienen mismo ID
-                System.out.println("Linea 133");
+            if (!boardsList.get(listIndex).getNumID(selectedNumsList.get(i)).equals(jTFClientID.getText())) {
                 aux=false;
                 break;
             }
@@ -149,7 +148,6 @@ public class BuyTickets extends javax.swing.JFrame {
             for (int i = 0; i < clientsList.size(); i++) {
                    
                 if (clientsList.get(i).getID().equals(jTFClientID.getText())) {
-                    System.out.println("Cliente encontrado");
                     clientListIndex=i;
                     return true;
                 }
@@ -161,7 +159,7 @@ public class BuyTickets extends javax.swing.JFrame {
 
 
 
-    public void payNumbers(){ // 3 = pagado
+    public void payNumbers(){ 
         java.util.Date fechaSeleccionada = jDateChooser1.getDate();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -185,7 +183,7 @@ public class BuyTickets extends javax.swing.JFrame {
             String data = "Numero: " + selectedNumsList.get(i) + "\nClientID: " + clientID + "\nFecha de Compra: " + fechaString + "\nMetodo de Pago: " + payMethod;
             BufferedImage qrNumber =boardsList.get(listIndex).generateNumQrImage(selectedNumsList.get(i), data);
             boardsList.get(listIndex).setImageQR(selectedNumsList.get(i), qrNumber);
-            view.changeStateButton(selectedNumsList.get(i), 3); //edit
+            view.changeStateButton(selectedNumsList.get(i), 3); 
     
         }
         
@@ -193,7 +191,7 @@ public class BuyTickets extends javax.swing.JFrame {
         this.dispose();        
     }
 
-    public void reserveNumbers(){ // 1 = reservado
+    public void reserveNumbers(){ 
     
         if (!verifyID()) {
             createClient();
@@ -203,12 +201,11 @@ public class BuyTickets extends javax.swing.JFrame {
         
             Boards auxBoard = boardsList.get(listIndex);
             auxBoard.setNumbersState(selectedNumsList.get(i),2);
-            view.changeStateButton(selectedNumsList.get(i), 2); // edit
+            view.changeStateButton(selectedNumsList.get(i), 2); 
             auxBoard.setNumberID(selectedNumsList.get(i),jTFClientID.getText());
             boardsList.set(listIndex, auxBoard);
             boardsList.get(listIndex).sendDatabaseValues(selectedNumsList.get(i));
 
-            System.out.println("ID asignado: "+boardsList.get(listIndex).getNumID(selectedNumsList.get(i)));
         }
         selectedNumsList.clear();
         this.dispose();
@@ -219,7 +216,7 @@ public class BuyTickets extends javax.swing.JFrame {
         for (int i = 0; i < selectedNums; i++) {
         
             boardsList.get(listIndex).setNumbersState(selectedNumsList.get(i),0);
-            view.changeStateButton(selectedNumsList.get(i), 0); // edit
+            view.changeStateButton(selectedNumsList.get(i), 0); 
         }
         selectedNumsList.clear();
         this.dispose();
@@ -280,6 +277,7 @@ public class BuyTickets extends javax.swing.JFrame {
             }
         });
 
+        jBPay.setEnabled(false);
         jBPay.setText("Pagar");
         jBPay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -333,6 +331,7 @@ public class BuyTickets extends javax.swing.JFrame {
             }
         });
 
+        jBReservation.setEnabled(false);
         jBReservation.setText("Reservar");
         jBReservation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -356,63 +355,65 @@ public class BuyTickets extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLClientName, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLClientID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLClientPhone, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jLPayMethod)
+                    .addComponent(jLTotalAmount))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTFTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFClientName, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFClientPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(97, 97, 97))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jCBPayMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLPayMethod1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTFClientID, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBClientRegistration)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(45, 45, 45))))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(151, 151, 151)
-                                .addComponent(jBPay)
-                                .addGap(12, 12, 12)
-                                .addComponent(jBReservation)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(230, 230, 230)
+                                .addGap(253, 253, 253)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLBoardName)
                                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLClientName, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLClientID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLClientPhone, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addGap(73, 73, 73)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jTFClientID, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jBClientRegistration))
-                                    .addComponent(jTFClientName, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTFClientPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
-                                .addComponent(jLTotalAmount)
-                                .addGap(26, 26, 26)
-                                .addComponent(jTFTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLPayMethod)
-                        .addGap(18, 18, 18)
-                        .addComponent(jCBPayMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(25, 25, 25)
-                        .addComponent(jLPayMethod1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(29, 29, 29))))
+                                .addGap(203, 203, 203)
+                                .addComponent(jBPay, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(jBReservation)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
+                        .addContainerGap()
+                        .addComponent(jLBoardName)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLClientID)
                             .addComponent(jTFClientID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -420,39 +421,39 @@ public class BuyTickets extends javax.swing.JFrame {
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTFClientName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLClientName)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLBoardName)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLClientName))
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTFClientPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLClientPhone))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLPayMethod)
-                                .addComponent(jCBPayMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLPayMethod1)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(30, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLPayMethod)
+                            .addComponent(jCBPayMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(54, 54, 54)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLTotalAmount)
-                            .addComponent(jTFTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTFTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel8)
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jBPay)
+                            .addComponent(jButton1)
+                            .addComponent(jBReservation)))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(24, 24, 24)
-                .addComponent(jLabel8)
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBPay)
-                    .addComponent(jButton1)
-                    .addComponent(jBReservation))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLPayMethod1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(36, 36, 36))
         );
 
@@ -473,7 +474,6 @@ public class BuyTickets extends javax.swing.JFrame {
 
     private void jBClientRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBClientRegistrationActionPerformed
         // TODO add your handling code here:
-        System.out.println(""+jCBPayMethod.getSelectedItem().toString());   
         setVisibleFields();        
     }//GEN-LAST:event_jBClientRegistrationActionPerformed
 

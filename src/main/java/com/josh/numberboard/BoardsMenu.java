@@ -112,7 +112,7 @@ public class BoardsMenu extends javax.swing.JFrame {
         OpenBoard = new javax.swing.JButton();
         ScrollListBoard = new javax.swing.JScrollPane();
         ListBoard = new javax.swing.JList<>();
-        ShowInfo = new javax.swing.JButton();
+        ShowQR = new javax.swing.JButton();
         fontLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -162,13 +162,15 @@ public class BoardsMenu extends javax.swing.JFrame {
 
         fontPanel.add(ScrollListBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 300, 340));
 
-        ShowInfo.setText("VER QR");
-        ShowInfo.addActionListener(new java.awt.event.ActionListener() {
+        ShowQR.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        ShowQR.setText("VER QR");
+        ShowQR.setEnabled(false);
+        ShowQR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ShowInfoActionPerformed(evt);
+                ShowQRActionPerformed(evt);
             }
         });
-        fontPanel.add(ShowInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 340, -1, -1));
+        fontPanel.add(ShowQR, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 340, -1, -1));
         fontPanel.add(fontLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 420));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -195,6 +197,7 @@ public class BoardsMenu extends javax.swing.JFrame {
         if(ListBoard.getSelectedIndex() != -1){
             OpenBoard.setEnabled(true);
             DeleteBoard.setEnabled(true);
+            ShowQR.setEnabled(true);
         }
     }//GEN-LAST:event_ListBoardMouseClicked
 
@@ -204,15 +207,16 @@ public class BoardsMenu extends javax.swing.JFrame {
         
         if(opt == 0){
             boardsList.get(ListBoard.getSelectedIndex()).deleteAllNumbers();
-            boardsList.get(ListBoard.getSelectedIndex()).deleteBoardDatabase(boardsList.get(ListBoard.getSelectedIndex()).getID()); //DATABASE
+            boardsList.get(ListBoard.getSelectedIndex()).deleteBoardDatabase(boardsList.get(ListBoard.getSelectedIndex()).getID()); 
             boardsList.remove(ListBoard.getSelectedIndex());
             listModel.remove(ListBoard.getSelectedIndex());
             OpenBoard.setEnabled(false);
             DeleteBoard.setEnabled(false);
+            ShowQR.setEnabled(false);
         }
     }//GEN-LAST:event_DeleteBoardActionPerformed
 
-    private void ShowInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowInfoActionPerformed
+    private void ShowQRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowQRActionPerformed
     int selectedIndex = ListBoard.getSelectedIndex();
         if (selectedIndex != -1) { 
      
@@ -221,26 +225,25 @@ public class BoardsMenu extends javax.swing.JFrame {
         
         BufferedImage qrImage = selectedBoard.getQrImage();
 
-        if (qrImage != null) { // Si se ha generado un QR válido
-            // Mostrar el QR en una nueva ventana
+        if (qrImage != null) { 
+            
             displayQRImage(qrImage,30 ,30);
         } else {
-            // Mostrar un mensaje de error si no se ha generado un QR válido
+            
             JOptionPane.showMessageDialog(this, "No se ha generado un código QR para este elemento.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     } else {
-        // Mostrar un mensaje si no se ha seleccionado ningún elemento
+        
         JOptionPane.showMessageDialog(this, "Por favor, selecciona un elemento de la lista.", "Error", JOptionPane.ERROR_MESSAGE);
     }              
    
             
-    }//GEN-LAST:event_ShowInfoActionPerformed
+    }//GEN-LAST:event_ShowQRActionPerformed
 
     private void OpenBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenBoardActionPerformed
   
-     view=new BoardTickets(); // edit
+     view=new BoardTickets(); 
      
-        System.out.println( boardsList.get(ListBoard.getSelectedIndex()).getNumAmount());
        view.initRows( ListBoard.getSelectedIndex());
 
       
@@ -289,7 +292,7 @@ public class BoardsMenu extends javax.swing.JFrame {
     private javax.swing.JList<String> ListBoard;
     private javax.swing.JButton OpenBoard;
     private javax.swing.JScrollPane ScrollListBoard;
-    private javax.swing.JButton ShowInfo;
+    private javax.swing.JButton ShowQR;
     private javax.swing.JButton createBoard;
     private javax.swing.JLabel fontLabel;
     private javax.swing.JPanel fontPanel;
